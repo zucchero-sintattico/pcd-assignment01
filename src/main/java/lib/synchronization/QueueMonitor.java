@@ -47,6 +47,6 @@ public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
 
     @Override
     public boolean isOpen() {
-        return monitored(() -> open);
+        return monitored(() -> open || !queue.isEmpty());
     }
 }
