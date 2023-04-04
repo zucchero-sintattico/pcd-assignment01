@@ -8,7 +8,10 @@ public class Main {
     public static void main(String[] args) {
         QueueMonitor<Path> queueMonitor = new QueueMonitor<>();
         Path path = Paths.get("src/main/java/");
+
         FileAnalyzer fileAnalyzer = new FileAnalyzer(queueMonitor, path);
+
+        fileAnalyzer.start();
     }
 }
 
