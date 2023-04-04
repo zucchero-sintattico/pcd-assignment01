@@ -12,8 +12,8 @@ public class PathConsumer extends QueueConsumerThread<Path> {
     private final QueueMonitor<Statistic> statsQueue;
     private final Barrier barrier;
 
-    public PathConsumer(final QueueMonitor<Path> queueMonitor, final QueueMonitor<Statistic> statsQueue, final Barrier barrier) {
-        super(queueMonitor);
+    public PathConsumer(final QueueMonitor<Path> pathQueue, final QueueMonitor<Statistic> statsQueue, final Barrier barrier) {
+        super(pathQueue);
         this.statsQueue = statsQueue;
         this.barrier = barrier;
     }
@@ -24,7 +24,6 @@ public class PathConsumer extends QueueConsumerThread<Path> {
             final int lines = Files.readAllLines(filepath).size();
             Logger.getInstance().log(filepath.toString() + " has " + lines + " lines");
             this.statsQueue.enqueue(new Statistic(filepath, lines));
-            ;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
