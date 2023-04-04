@@ -19,7 +19,7 @@ public class PathConsumer extends QueueConsumerThread<Path> {
     }
 
     @Override
-    public void consume(Path filepath) {
+    public void consume(final Path filepath) {
         try {
             final int lines = Files.readAllLines(filepath).size();
             System.out.println(filepath + " has " + lines + " lines");
