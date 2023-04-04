@@ -1,6 +1,8 @@
-package pcd.lab04.monitors.barrier;
+package assignment;
 
-public class BarrierImpl implements Barrier{
+import lib.synchronization.Barrier;
+
+public class BarrierImpl implements Barrier {
     private int nArrivedSoFar;
     private int nTotal;
 
