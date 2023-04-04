@@ -1,5 +1,7 @@
 package lib.architecture;
 
+import java.io.IOException;
+
 public interface Consumer<T> {
-    void consume(final T value);
+    void consume(final T value) throws IOException;
 }

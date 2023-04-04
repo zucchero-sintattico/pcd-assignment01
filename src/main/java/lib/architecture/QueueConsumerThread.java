@@ -1,5 +1,6 @@
 package lib.architecture;
 
+import assignment.Statistic;
 import lib.synchronization.QueueMonitor;
 
 public abstract class QueueConsumerThread<T> extends Thread implements QueueConsumer<T> {
