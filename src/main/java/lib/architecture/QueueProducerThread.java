@@ -6,11 +6,9 @@ import java.nio.file.Path;
 
 public abstract class QueueProducerThread<T> extends Thread implements Producer<T> {
     private final QueueMonitor<T> queue;
-    protected final Path path;
 
-    public QueueProducerThread(final QueueMonitor<T> queue, final Path path) {
+    public QueueProducerThread(final QueueMonitor<T> queue) {
         this.queue = queue;
-        this.path = path;
     }
 
     @Override

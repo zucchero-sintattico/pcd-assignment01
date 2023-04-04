@@ -10,8 +10,11 @@ import java.util.stream.Stream;
 
 public class FileAnalyzer extends QueueProducerThread<Path> {
 
+    private final Path path;
+
     public FileAnalyzer(QueueMonitor<Path> queue, Path path) {
-        super(queue, path);
+        super(queue);
+        this.path = path;
     }
 
     @Override
