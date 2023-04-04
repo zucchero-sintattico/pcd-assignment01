@@ -14,6 +14,6 @@ public abstract class QueueConsumerThread<T> extends Thread implements QueueCons
         while (queueMonitor.isOpen()) {
             queueMonitor.dequeue().ifPresent(this::consume);
         }
-        onCompleted();
+        onQueueClosed();
     }
 }

@@ -1,5 +1,5 @@
 package lib.architecture;
 
 public interface QueueConsumer<T> extends Consumer<T> {
-    void onCompleted();
+    void onQueueClosed();
 }

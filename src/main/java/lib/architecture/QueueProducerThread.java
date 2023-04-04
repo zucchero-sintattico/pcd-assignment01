@@ -2,9 +2,9 @@ package lib.architecture;
 
 import lib.synchronization.QueueMonitor;
 
-public abstract class QueueProducer<T> extends Thread implements Producer<T> {
+public abstract class QueueProducerThread<T> extends Thread implements Producer<T> {
     private final QueueMonitor<T> queue;
-    public QueueProducer(final QueueMonitor<T> queue) {
+    public QueueProducerThread(final QueueMonitor<T> queue) {
         this.queue = queue;
     }
 
@@ -13,7 +13,7 @@ public abstract class QueueProducer<T> extends Thread implements Producer<T> {
         this.queue.enqueue(value);
     }
 
-    final protected void complete() {
+    final protected void closeQueue() {
         this.queue.close();
     }
 
