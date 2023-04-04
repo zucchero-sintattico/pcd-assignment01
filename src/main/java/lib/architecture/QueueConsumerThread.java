@@ -1,6 +1,6 @@
 package lib.architecture;
 
-import lib.utils.QueueMonitor;
+import lib.synchronization.QueueMonitor;
 
 public abstract class QueueConsumerThread<T> extends Thread implements QueueConsumer<T> {
     private final QueueMonitor<T> queueMonitor;

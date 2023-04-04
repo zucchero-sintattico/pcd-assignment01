@@ -1,6 +1,6 @@
 package lib.architecture;
 
-import lib.utils.QueueMonitor;
+import lib.synchronization.QueueMonitor;
 
 public abstract class QueueProducer<T> extends Thread implements Producer<T> {
     private final QueueMonitor<T> queue;
