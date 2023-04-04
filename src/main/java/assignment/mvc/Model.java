@@ -1,4 +1,4 @@
-package mvc;
+package assignment.mvc;
 
 public interface Model {
     String getState();

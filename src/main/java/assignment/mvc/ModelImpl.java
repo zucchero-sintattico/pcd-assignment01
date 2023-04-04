@@ -1,4 +1,4 @@
-package mvc;
+package assignment.mvc;
 
 public class ModelImpl implements Model {
     private ModelObserver observer;
