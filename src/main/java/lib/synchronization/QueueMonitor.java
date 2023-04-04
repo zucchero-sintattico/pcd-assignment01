@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
 
 public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
-    private final Queue<T> queue = new ArrayDeque<>();
+    private final Queue<T> queue = new ConcurrentLinkedQueue<>();
     private final Condition notEmpty = newCondition();
     private boolean open = true;
 
@@ -33,7 +33,7 @@ public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
                     e.printStackTrace();
                 }
             }
-            return open ? Optional.of(queue.remove()) : Optional.empty();
+            return this.isOpen() ? Optional.of(queue.remove()) : Optional.empty();
         });
     }
 
@@ -47,6 +47,6 @@ public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
 
     @Override
     public boolean isOpen() {
-        return monitored(() -> open);
+        return monitored(() -> open || !this.queue.isEmpty());
     }
 }
