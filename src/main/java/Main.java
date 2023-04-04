@@ -1,11 +1,9 @@
-import assignment.FileAnalyzer;
+import assignment.PathProducer;
 import assignment.PathConsumer;
-import assignment.Statistic;
 import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.synchronization.ActionBarrier;
 import lib.synchronization.Barrier;
-import lib.synchronization.QueueMonitor;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +14,7 @@ public class Main {
         final PathQueue pathQueue = new PathQueue();
         final StatisticQueue statisticQueue = new StatisticQueue();
 
-        Barrier barrier = new ActionBarrier(2, () -> {
+        Barrier barrier = new ActionBarrier(1, () -> {
             //statisticQueueMonitor.close();
             System.out.println("All threads are done");
         });
@@ -25,10 +23,10 @@ public class Main {
 
         PathConsumer pathConsumer = new PathConsumer(pathQueue, statisticQueue, barrier);
 
-        FileAnalyzer fileAnalyzer = new FileAnalyzer(pathQueue, path);
+        PathProducer pathProducer = new PathProducer(pathQueue, path);
 
         pathConsumer.start();
-        fileAnalyzer.start();
+        pathProducer.start();
     }
 }
 

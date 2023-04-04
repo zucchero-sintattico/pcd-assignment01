@@ -8,11 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public class FileAnalyzer extends QueueProducerThread<Path> {
+public class PathProducer extends QueueProducerThread<Path> {
 
     private final Path path;
 
-    public FileAnalyzer(QueueMonitor<Path> queue, Path path) {
+    public PathProducer(QueueMonitor<Path> queue, Path path) {
         super(queue);
         this.path = path;
     }

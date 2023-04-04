@@ -4,7 +4,6 @@ import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.architecture.QueueConsumerThread;
 import lib.synchronization.Barrier;
-import lib.synchronization.QueueMonitor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +23,7 @@ public class PathConsumer extends QueueConsumerThread<Path> {
     public void consume(final Path filepath) {
         try {
             final int lines = Files.readAllLines(filepath).size();
-            Logger.getInstance().log(filepath + " has " + lines + " lines");
+            Logger.getInstance().log("Consumed " + filepath + " has " + lines + " lines");
             this.statsQueue.enqueue(new Statistic(filepath, lines));
         } catch (IOException e) {
             System.out.println(e);
