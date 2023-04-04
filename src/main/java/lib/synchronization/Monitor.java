@@ -12,18 +12,15 @@ public abstract class Monitor {
     }
 
     protected final void monitored(final Runnable f) {
-        this.monitored(() -> {
-            f.run();
-            return null;
-        });
+        mutex.lock();
+        f.run();
+        mutex.unlock();
     }
 
     protected final <A> A monitored(final Supplier<A> f) {
         mutex.lock();
-        try {
-            return f.get();
-        } finally {
-            mutex.unlock();
-        }
+        final A res = f.get();
+        mutex.unlock();
+        return res;
     }
 }

@@ -4,7 +4,7 @@ import java.util.concurrent.locks.Condition;
 
 public class ActionBarrier extends Monitor implements Barrier {
     private final Runnable action;
-    private final Condition completed = newCondition();
+    private final Condition completed = this.newCondition();
     private final int n;
     private int arrived = 0;
 
@@ -15,14 +15,14 @@ public class ActionBarrier extends Monitor implements Barrier {
 
     @Override
     public void hitAndWaitAll() {
-        monitored(() -> {
+        this.monitored(() -> {
             this.arrived++;
             if (this.arrived == this.n) {
-                this.completed.notifyAll();
+                this.completed.signalAll();
                 this.action.run();
             } else {
                 try {
-                    completed.await();
+                    this.completed.await();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
