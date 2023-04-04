@@ -13,7 +13,7 @@ public abstract class QueueProducer<T> extends Thread implements Producer<T> {
         this.queue.enqueue(value);
     }
 
-    final protected void complete() {
+    final protected void closeQueue() {
         this.queue.close();
     }
 

@@ -1,6 +1,5 @@
 package lib.synchronization;
 
-import lib.synchronization.Monitor;
 import lib.utils.CloseableQueue;
 
 import java.util.Optional;
