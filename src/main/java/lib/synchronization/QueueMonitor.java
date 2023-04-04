@@ -6,6 +6,8 @@ import java.util.ArrayDeque;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
 
 public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {

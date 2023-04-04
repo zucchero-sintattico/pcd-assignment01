@@ -13,6 +13,7 @@ public class Main {
         QueueMonitor<Path> queueMonitor = new QueueMonitor<>();
         QueueMonitor<Statistic> statisticQueueMonitor = new QueueMonitor<>();
         Barrier barrier = new ActionBarrier(2, () -> {
+            statisticQueueMonitor.close();
             System.out.println("All threads are done");
         });
 

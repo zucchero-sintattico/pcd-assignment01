@@ -1,4 +1,4 @@
-package mvc;
+package assignment.mvc;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
