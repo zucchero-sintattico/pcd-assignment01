@@ -24,11 +24,9 @@ public class FileAnalyzer extends QueueProducerThread<Path> {
         try {
             Files.walk(this.path).filter(Files::isRegularFile)
                     .filter(p -> p.toString().endsWith(".java"))
-                    .forEach(f -> {
-                        produce(f);
-                    });
+                    .forEach(this::produce);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.toString());
         }
     }
 }
