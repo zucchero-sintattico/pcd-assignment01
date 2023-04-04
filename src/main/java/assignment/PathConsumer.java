@@ -22,8 +22,9 @@ public class PathConsumer extends QueueConsumerThread<Path> {
     public void consume(Path filepath) {
         try {
             final int lines = Files.readAllLines(filepath).size();
-            System.out.println(filepath + " has " + lines + " lines");
-            this.statsQueue.enqueue(new Statistic(filepath, lines));;
+            Logger.getInstance().log(filepath.toString() + " has " + lines + " lines");
+            this.statsQueue.enqueue(new Statistic(filepath, lines));
+            ;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
