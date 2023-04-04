@@ -6,27 +6,32 @@ import lib.synchronization.QueueMonitor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class FileAnalyzer extends QueueProducerThread<Path> {
 
+    private final Path path;
 
     public FileAnalyzer(QueueMonitor<Path> queue, Path path) {
-        super(queue, path);
-    }
-
-    @Override
-    public void produce(Path value) {
-        super.produce(value);
+        super(queue);
+        this.path = path;
     }
 
     @Override
     public void run() {
-        try {
-            Files.walk(this.path).filter(Files::isRegularFile)
+        Logger.getInstance().log("Starting File Analyzer");
+        try (Stream<Path> pathStream = Files.walk(this.path)) {
+            pathStream.filter(Files::isRegularFile)
                     .filter(p -> p.toString().endsWith(".java"))
-                    .forEach(this::produce);
+                    .forEach((f) -> {
+                        this.produce(f);
+                        Logger.getInstance().log("Produced " + f);
+                    });
         } catch (IOException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
+        } finally {
+            this.closeQueue();
+            Logger.getInstance().log("Finished Reading File");
         }
     }
 }

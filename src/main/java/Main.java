@@ -1,15 +1,14 @@
-import gov.nasa.jpf.vm.Verify;
-import lib.synchronization.ActionBarrier;
+import assignment.FileAnalyzer;
+import lib.synchronization.QueueMonitor;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) {
-
+        QueueMonitor<Path> queueMonitor = new QueueMonitor<>();
+        Path path = Paths.get("src/main/java/");
+        FileAnalyzer fileAnalyzer = new FileAnalyzer(queueMonitor, path);
     }
 }
 
