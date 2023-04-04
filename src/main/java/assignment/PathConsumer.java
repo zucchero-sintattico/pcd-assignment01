@@ -3,7 +3,6 @@ package assignment;
 import lib.architecture.QueueConsumerThread;
 import lib.synchronization.QueueMonitor;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -23,6 +22,6 @@ public class PathConsumer extends QueueConsumerThread<Path> {
 
     @Override
     public void onQueueClosed() {
-
+        this.statsQueue.close();
     }
 }
