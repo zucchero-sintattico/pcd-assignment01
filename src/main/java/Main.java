@@ -15,10 +15,7 @@ public class Main {
         final PathQueue pathQueue = new PathQueue();
         final StatisticQueue statisticQueue = new StatisticQueue();
 
-        final Barrier barrier = new ActionBarrier(1, () -> {
-            //statisticQueueMonitor.close();
-            System.out.println("All threads are done");
-        });
+        final Barrier barrier = new ActionBarrier(1, statisticQueue::close);
 
         final Path path = Paths.get("src/main/java/");
 
@@ -31,6 +28,14 @@ public class Main {
         statisticConsumer.start();
         pathConsumer.start();
         pathProducer.start();
+
+        try {
+            pathProducer.join();
+            pathConsumer.join();
+            statisticConsumer.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

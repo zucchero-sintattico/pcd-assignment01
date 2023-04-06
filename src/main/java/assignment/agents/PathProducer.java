@@ -1,6 +1,7 @@
 package assignment.agents;
 
-import assignment.Logger;
+import assignment.logger.Logger;
+import assignment.logger.LoggerMonitor;
 import lib.architecture.QueueProducerThread;
 import lib.synchronization.QueueMonitor;
 
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
 
 public class PathProducer extends QueueProducerThread<Path> {
 
+    private final Logger logger = LoggerMonitor.getInstance();
     private final Path path;
 
     public PathProducer(QueueMonitor<Path> queue, Path path) {
@@ -20,19 +22,19 @@ public class PathProducer extends QueueProducerThread<Path> {
 
     @Override
     public void run() {
-        Logger.getInstance().log("Starting File Analyzer");
+        this.logger.log("Starting File Analyzer");
         try (Stream<Path> pathStream = Files.walk(this.path)) {
             pathStream.filter(Files::isRegularFile)
                     .filter(p -> p.toString().endsWith(".java"))
                     .forEach((f) -> {
                         this.produce(f);
-                        Logger.getInstance().log("Produced " + f);
+                        this.logger.log("Produced " + f);
                     });
         } catch (IOException e) {
             System.out.println(e.getMessage());
         } finally {
             this.closeQueue();
-            Logger.getInstance().log("Finished Reading File");
+            LoggerMonitor.getInstance().log("Finished Reading File");
         }
     }
 }

@@ -1,6 +1,7 @@
 package assignment.agents;
 
-import assignment.Logger;
+import assignment.logger.Logger;
+import assignment.logger.LoggerMonitor;
 import assignment.Statistic;
 import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class PathConsumer extends QueueConsumerThread<Path> {
+    private final Logger logger = LoggerMonitor.getInstance();
     private final StatisticQueue statsQueue;
     private final Barrier barrier;
 
@@ -25,7 +27,7 @@ public class PathConsumer extends QueueConsumerThread<Path> {
     public void consume(final Path filepath) {
         try {
             final int lines = Files.readAllLines(filepath).size();
-            Logger.getInstance().log("Consumed " + filepath + " has " + lines + " lines");
+            this.logger.log("Consumed " + filepath + " has " + lines + " lines");
             this.statsQueue.enqueue(new Statistic(filepath, lines));
         } catch (IOException e) {
             System.out.println(e);
