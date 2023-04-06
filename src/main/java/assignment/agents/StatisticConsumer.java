@@ -6,6 +6,9 @@ import assignment.logger.LoggerMonitor;
 import assignment.queue.StatisticQueue;
 import lib.architecture.QueueConsumerThread;
 
+/**
+ * Consumes statistics from the queue.
+ */
 public class StatisticConsumer extends QueueConsumerThread<Statistic> {
     private final Logger logger = LoggerMonitor.getInstance();
 

@@ -2,6 +2,9 @@ package assignment.logger;
 
 import lib.synchronization.Monitor;
 
+/**
+ * Thread safe logger.
+ */
 public class LoggerMonitor extends Monitor implements Logger {
     private static LoggerMonitor instance = null;
 

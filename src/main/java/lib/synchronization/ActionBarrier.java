@@ -2,6 +2,9 @@ package lib.synchronization;
 
 import java.util.concurrent.locks.Condition;
 
+/**
+ * A barrier that executes an action when all threads have hit the barrier.
+ */
 public class ActionBarrier extends Monitor implements Barrier {
     private final Runnable action;
     private final Condition completed = this.newCondition();

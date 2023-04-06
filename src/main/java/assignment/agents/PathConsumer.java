@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Consumes paths from the queue and produces statistics for each path.
+ * Once a statistic is produced, it is enqueued in the statistics queue.
+ * When the queue is closed, it notifies the barrier in order to safely close the statistics queue.
+ */
 public class PathConsumer extends QueueConsumerThread<Path> {
     private final Logger logger = LoggerMonitor.getInstance();
     private final StatisticQueue statsQueue;

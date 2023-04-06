@@ -7,6 +7,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
 
+/**
+ * A generic closeable queue that uses a monitor to synchronize access to the queue.
+ * @param <T> the type of the elements in the queue.
+ * @see Monitor
+ * @see CloseableQueue
+ */
 public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
     private final Queue<T> queue = new ConcurrentLinkedQueue<>();
     private final Condition notEmpty = newCondition();

@@ -10,6 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+/**
+ * Scan the given path and enqueue all the java files found.
+ * Once the scan is finished, close the queue.
+ */
 public class PathProducer extends QueueProducerThread<Path> {
 
     private final Logger logger = LoggerMonitor.getInstance();
