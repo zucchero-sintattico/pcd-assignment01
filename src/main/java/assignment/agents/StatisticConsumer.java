@@ -1,5 +1,6 @@
-package assignment;
+package assignment.agents;
 
+import assignment.Statistic;
 import assignment.queue.StatisticQueue;
 import lib.architecture.QueueConsumer;
 import lib.architecture.QueueConsumerThread;
@@ -19,5 +20,5 @@ public class StatisticConsumer extends QueueConsumerThread<Statistic> {
     public void onQueueClosed() {
         System.out.println("Queue closed");
     }
-    
+
 }

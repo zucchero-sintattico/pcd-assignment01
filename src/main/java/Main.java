@@ -1,5 +1,6 @@
-import assignment.PathProducer;
-import assignment.PathConsumer;
+import assignment.agents.PathProducer;
+import assignment.agents.PathConsumer;
+import assignment.agents.StatisticConsumer;
 import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.synchronization.ActionBarrier;
@@ -14,17 +15,20 @@ public class Main {
         final PathQueue pathQueue = new PathQueue();
         final StatisticQueue statisticQueue = new StatisticQueue();
 
-        Barrier barrier = new ActionBarrier(1, () -> {
+        final Barrier barrier = new ActionBarrier(1, () -> {
             //statisticQueueMonitor.close();
             System.out.println("All threads are done");
         });
 
-        Path path = Paths.get("src/main/java/");
+        final Path path = Paths.get("src/main/java/");
 
-        PathConsumer pathConsumer = new PathConsumer(pathQueue, statisticQueue, barrier);
+        final PathConsumer pathConsumer = new PathConsumer(pathQueue, statisticQueue, barrier);
 
-        PathProducer pathProducer = new PathProducer(pathQueue, path);
+        final PathProducer pathProducer = new PathProducer(pathQueue, path);
 
+        final StatisticConsumer statisticConsumer = new StatisticConsumer(statisticQueue);
+
+        statisticConsumer.start();
         pathConsumer.start();
         pathProducer.start();
     }

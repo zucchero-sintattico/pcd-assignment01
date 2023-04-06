@@ -1,5 +1,6 @@
-package assignment;
+package assignment.agents;
 
+import assignment.Logger;
 import lib.architecture.QueueProducerThread;
 import lib.synchronization.QueueMonitor;
 

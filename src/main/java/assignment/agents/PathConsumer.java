@@ -1,5 +1,7 @@
-package assignment;
+package assignment.agents;
 
+import assignment.Logger;
+import assignment.Statistic;
 import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.architecture.QueueConsumerThread;
