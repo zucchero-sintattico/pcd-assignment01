@@ -1,6 +1,5 @@
-package assignment;
+package assignment.algorithm;
 
-import assignment.AlgorithmConfiguration;
 import assignment.agents.PathConsumer;
 import assignment.agents.PathProducer;
 import assignment.agents.StatisticConsumer;

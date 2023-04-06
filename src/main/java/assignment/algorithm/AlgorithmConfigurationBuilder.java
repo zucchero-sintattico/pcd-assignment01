@@ -1,4 +1,4 @@
-package assignment;
+package assignment.algorithm;
 
 public class AlgorithmConfigurationBuilder {
     int numberOfPathProducer = 1;

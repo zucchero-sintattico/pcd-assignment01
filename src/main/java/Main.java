@@ -1,5 +1,5 @@
-import assignment.AlgorithmConfiguration;
-import assignment.AssignmentAlgorithm;
+import assignment.algorithm.AlgorithmConfiguration;
+import assignment.algorithm.AssignmentAlgorithm;
 
 public class Main {
     public static void main(String[] args) {

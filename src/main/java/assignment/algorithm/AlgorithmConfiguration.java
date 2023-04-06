@@ -1,4 +1,4 @@
-package assignment;
+package assignment.algorithm;
 
 public class AlgorithmConfiguration {
 
