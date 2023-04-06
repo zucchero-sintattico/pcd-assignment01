@@ -1,5 +1,8 @@
-package assignment;
+package assignment.agents;
 
+import assignment.logger.Logger;
+import assignment.logger.LoggerMonitor;
+import assignment.Statistic;
 import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.architecture.QueueConsumerThread;
@@ -9,7 +12,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Consumes paths from the queue and produces statistics for each path.
+ * Once a statistic is produced, it is enqueued in the statistics queue.
+ * When the queue is closed, it notifies the barrier in order to safely close the statistics queue.
+ */
 public class PathConsumer extends QueueConsumerThread<Path> {
+    private final Logger logger = LoggerMonitor.getInstance();
     private final StatisticQueue statsQueue;
     private final Barrier barrier;
 
@@ -23,7 +32,7 @@ public class PathConsumer extends QueueConsumerThread<Path> {
     public void consume(final Path filepath) {
         try {
             final int lines = Files.readAllLines(filepath).size();
-            Logger.getInstance().log("Consumed " + filepath + " has " + lines + " lines");
+            this.logger.log("Consumed " + filepath + " has " + lines + " lines");
             this.statsQueue.enqueue(new Statistic(filepath, lines));
         } catch (IOException e) {
             System.out.println(e);

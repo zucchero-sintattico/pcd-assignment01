@@ -1,32 +1,25 @@
-import assignment.PathProducer;
-import assignment.PathConsumer;
-import assignment.queue.PathQueue;
-import assignment.queue.StatisticQueue;
-import lib.synchronization.ActionBarrier;
-import lib.synchronization.Barrier;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import assignment.algorithm.AlgorithmConfiguration;
+import assignment.algorithm.AssignmentAlgorithm;
 
 public class Main {
     public static void main(String[] args) {
 
-        final PathQueue pathQueue = new PathQueue();
-        final StatisticQueue statisticQueue = new StatisticQueue();
+        final AlgorithmConfiguration configuration = AlgorithmConfiguration.builder()
+                .withNumberOfPathProducer(1)
+                .withNumberOfPathConsumer(5)
+                .withNumberOfStatisticsConsumer(1)
+                .build();
 
-        Barrier barrier = new ActionBarrier(1, () -> {
-            //statisticQueueMonitor.close();
-            System.out.println("All threads are done");
-        });
+        final String path = "src/main/java/";
+        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(path, configuration);
 
-        Path path = Paths.get("src/main/java/");
+        algorithm.start();
+        try {
+            algorithm.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-        PathConsumer pathConsumer = new PathConsumer(pathQueue, statisticQueue, barrier);
-
-        PathProducer pathProducer = new PathProducer(pathQueue, path);
-
-        pathConsumer.start();
-        pathProducer.start();
     }
 }
 

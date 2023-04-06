@@ -2,8 +2,11 @@ package lib.architecture;
 
 import lib.synchronization.QueueMonitor;
 
-import java.nio.file.Path;
-
+/**
+ * Thread that produces values to a queue monitor.
+ * @param <T> Type of values to produce.
+ * @see QueueMonitor
+ */
 public abstract class QueueProducerThread<T> extends Thread implements Producer<T> {
     private final QueueMonitor<T> queue;
 
