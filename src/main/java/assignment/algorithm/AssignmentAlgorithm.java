@@ -27,7 +27,7 @@ public class AssignmentAlgorithm {
 
 
     public AssignmentAlgorithm(final String path, final AlgorithmConfiguration configuration) {
-        this.statisticsBarrier = new ActionBarrier(configuration.numberOfPathConsumer, statisticQueue::close);
+        this.statisticsBarrier = new ActionBarrier(configuration.numberOfPathProducer, statisticQueue::close);
         this.pathProducers = createAgents(configuration.numberOfPathProducer,
                 () -> new PathProducer(pathQueue, Paths.get(path))
         );
