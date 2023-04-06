@@ -1,5 +1,12 @@
 package assignment.mvc;
 
+import assignment.Statistic;
+import lib.synchronization.QueueMonitor;
+
 public interface Model {
-    String getState();
+    QueueMonitor<Statistic> getState();
+
+    void addObserver(ModelObserver obs);
+
+    void update();
 }

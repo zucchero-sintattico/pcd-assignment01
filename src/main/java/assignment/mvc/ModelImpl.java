@@ -1,18 +1,37 @@
 package assignment.mvc;
 
+import assignment.Logger;
+import assignment.Statistic;
+import lib.synchronization.QueueMonitor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModelImpl implements Model {
-    private ModelObserver observer;
+    private List<ModelObserver> observers;
+    private QueueMonitor<Statistic> queueMonitor;
 
     public ModelImpl() {
-    }
-
-    public void setObserver(ModelObserver observer) {
-        this.observer = observer;
+        this.observers = new ArrayList<>();
+        this.queueMonitor = new QueueMonitor<>();
     }
 
     @Override
-    public String getState() {
-        return "";
+    public QueueMonitor<Statistic> getState() {
+        return this.queueMonitor;
+    }
+
+    @Override
+    public void addObserver(ModelObserver obs) {
+        this.observers.add(obs);
+    }
+
+    @Override
+    public void update() {
+        Logger.getInstance().log("Model.update");
+        for (ModelObserver obs : this.observers) {
+            obs.modelUpdated(this);
+        }
     }
 }
 
