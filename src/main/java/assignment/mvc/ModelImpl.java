@@ -1,6 +1,6 @@
 package assignment.mvc;
 
-import assignment.Logger;
+import assignment.logger.LoggerMonitor;
 import assignment.Statistic;
 import lib.synchronization.QueueMonitor;
 
@@ -28,7 +28,7 @@ public class ModelImpl implements Model {
 
     @Override
     public void update() {
-        Logger.getInstance().log("Model.update");
+        LoggerMonitor.getInstance().log("Model.update");
         for (ModelObserver obs : this.observers) {
             obs.modelUpdated(this);
         }

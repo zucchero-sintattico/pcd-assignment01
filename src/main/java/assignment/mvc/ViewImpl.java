@@ -1,6 +1,6 @@
 package assignment.mvc;
 
-import assignment.Logger;
+import assignment.logger.LoggerMonitor;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -54,7 +54,7 @@ class ViewImpl extends JFrame implements ActionListener, View {
     }
 
     public void update(Model model) {
-        Logger.getInstance().log("View.update");
+        LoggerMonitor.getInstance().log("View.update");
     }
 }
 
