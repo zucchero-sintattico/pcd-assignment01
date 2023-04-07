@@ -2,6 +2,7 @@ package assignment.mvc;
 
 import assignment.Statistic;
 import assignment.algorithm.AlgorithmStatus;
+import assignment.mvc.model.Range;
 
 import javax.swing.*;
 import java.awt.*;

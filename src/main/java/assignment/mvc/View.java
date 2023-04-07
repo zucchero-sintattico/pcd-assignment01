@@ -2,8 +2,8 @@ package assignment.mvc;
 
 import assignment.Statistic;
 import assignment.algorithm.AlgorithmStatus;
+import assignment.mvc.model.Range;
 
-import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Map;
 

@@ -1,9 +1,9 @@
-package assignment.mvc;
+package assignment.mvc.model;
 
 import assignment.Statistic;
-import assignment.mvc.listeners.DistributionChangeListener;
-import assignment.mvc.listeners.NumberOfFilesChangeListener;
-import assignment.mvc.listeners.TopChangeListener;
+import assignment.mvc.model.listeners.DistributionChangeListener;
+import assignment.mvc.model.listeners.NumberOfFilesChangeListener;
+import assignment.mvc.model.listeners.TopChangeListener;
 
 import java.util.*;
 

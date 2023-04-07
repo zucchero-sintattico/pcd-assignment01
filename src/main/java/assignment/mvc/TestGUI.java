@@ -1,5 +1,9 @@
 package assignment.mvc;
 
+import assignment.mvc.model.Model;
+import assignment.mvc.model.ModelConfiguration;
+import assignment.mvc.model.ModelImpl;
+
 public class TestGUI {
     static public void main(String[] args) {
 

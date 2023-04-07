@@ -1,6 +1,6 @@
-package assignment.mvc.listeners;
+package assignment.mvc.model.listeners;
 
-import assignment.mvc.Range;
+import assignment.mvc.model.Range;
 import lib.architecture.Consumer;
 
 import java.util.Map;

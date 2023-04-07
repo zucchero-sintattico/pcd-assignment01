@@ -1,4 +1,4 @@
-package assignment.mvc.listeners;
+package assignment.mvc.model.listeners;
 
 import assignment.Statistic;
 import lib.architecture.Consumer;

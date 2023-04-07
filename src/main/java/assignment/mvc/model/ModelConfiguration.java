@@ -1,4 +1,4 @@
-package assignment.mvc;
+package assignment.mvc.model;
 
 public class ModelConfiguration {
     public final int n;
