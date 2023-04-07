@@ -16,5 +16,4 @@ public interface View {
 
     void updateDistribution(List<Statistic> stats);
 
-
 }
