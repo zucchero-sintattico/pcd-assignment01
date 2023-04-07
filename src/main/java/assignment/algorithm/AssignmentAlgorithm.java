@@ -3,6 +3,7 @@ package assignment.algorithm;
 import assignment.agents.PathConsumer;
 import assignment.agents.PathProducer;
 import assignment.agents.StatisticConsumer;
+import assignment.mvc.Model;
 import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.synchronization.ActionBarrier;
@@ -26,7 +27,7 @@ public class AssignmentAlgorithm {
     private final Set<StatisticConsumer> statisticConsumers;
 
 
-    public AssignmentAlgorithm(final String path, final AlgorithmConfiguration configuration) {
+    public AssignmentAlgorithm(final Model model, final String path, final AlgorithmConfiguration configuration) {
         this.statisticsBarrier = new ActionBarrier(configuration.numberOfPathConsumer, statisticQueue::close);
         this.pathProducers = createAgents(configuration.numberOfPathProducer,
                 () -> new PathProducer(pathQueue, Paths.get(path))
@@ -35,7 +36,7 @@ public class AssignmentAlgorithm {
                 () -> new PathConsumer(pathQueue, statisticQueue, statisticsBarrier)
         );
         this.statisticConsumers = createAgents(configuration.numberOfStatisticsConsumer,
-                () -> new StatisticConsumer(statisticQueue)
+                () -> new StatisticConsumer(statisticQueue, model)
         );
     }
 

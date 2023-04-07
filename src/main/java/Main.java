@@ -11,7 +11,8 @@ public class Main {
                 .build();
 
         final String path = "src/main/java/";
-        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(path, configuration);
+
+        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(null, path, configuration);
 
         algorithm.start();
         try {
