@@ -1,16 +1,12 @@
 package assignment.mvc;
 
 import assignment.Statistic;
-import com.sun.tools.javac.util.Pair;
-import lib.architecture.Consumer;
+import assignment.mvc.listeners.DistributionChangeListener;
+import assignment.mvc.listeners.NumberOfFilesChangeListener;
+import assignment.mvc.listeners.TopChangeListener;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-interface NumberOfFilesChangeListener extends Consumer<Integer> {}
-interface TopChangeListener extends Consumer<List<Statistic>> {}
-interface DistributionChangeListener extends Consumer<Map<Range, Integer>> {}
 
 public interface Model {
     Integer getNumberOfFiles();
