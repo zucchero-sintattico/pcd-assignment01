@@ -56,5 +56,20 @@ class ViewImpl extends JFrame implements ActionListener, View {
     public void update(Model model) {
         LoggerMonitor.getInstance().log("View.update");
     }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void setController(Controller controller) {
+
+    }
+
+    @Override
+    public void actionPerformed(String actionCommand) {
+
+    }
 }
 
