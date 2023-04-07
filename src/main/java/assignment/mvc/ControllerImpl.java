@@ -21,9 +21,9 @@ public class ControllerImpl implements Controller{
     private AlgorithmStatus status;
     private View view;
 
-
     public ControllerImpl(Model model, Path path) {
         this.model = model;
+        this.path = path;
         this.model.registerOnTopNChange((topN) -> this.view.updateTopN(topN));
         this.model.registerOnDistributionChange((distribution) -> this.view.updateDistribution(distribution));
         this.model.registerOnNumberOfFilesChange((numberOfFiles) -> this.view.updateNumberOfFiles(numberOfFiles));
@@ -33,24 +33,6 @@ public class ControllerImpl implements Controller{
                 .withNumberOfPathConsumer(NUMBER_OF_PATH_CONSUMER)
                 .withNumberOfStatisticsConsumer(NUMBER_OF_STATISTICS_CONSUMER)
                 .build();
-        this.path = path;
-    }
-    @Override
-    public void processEvent(String actionCommand) {
-        switch (actionCommand) {
-            case "start":
-                startAlgorithm(this.config);
-                this.status = AlgorithmStatus.RUNNING;
-                this.view.updateAlgorithmStatus(this.status);
-                break;
-            case "stop":
-                stopAlgorithm();
-                this.status = AlgorithmStatus.STOPPED;
-                this.view.updateAlgorithmStatus(this.status);
-                break;
-            default:
-                this.logger.log("Unknown action command: " + actionCommand);
-        }
     }
 
     @Override
@@ -61,12 +43,17 @@ public class ControllerImpl implements Controller{
     @Override
     public void startAlgorithm(AlgorithmConfiguration configuration) {
         this.algorithm = new AssignmentAlgorithm(this.model, this.path, configuration);
+        this.algorithm.start();
+        this.status = AlgorithmStatus.RUNNING;
+        this.view.updateAlgorithmStatus(this.status);
     }
 
     @Override
     public void stopAlgorithm() {
         try {
             this.algorithm.join();
+            this.status = AlgorithmStatus.STOPPED;
+            this.view.updateAlgorithmStatus(this.status);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
