@@ -5,7 +5,8 @@ public class TestGUI {
 
         Model model = new ModelImpl();
         Controller controller = new ControllerImpl(model);
-        ViewImpl view = new ViewImpl(controller);
+        ViewImpl view = new ViewImpl();
+        view.setController(controller);
         controller.setView(view);
         view.setVisible(true);
 

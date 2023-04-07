@@ -18,10 +18,9 @@ class ViewImpl extends JFrame implements ActionListener, View {
     private Controller controller;
     private JTextField state;
 
-    public ViewImpl(Controller controller) {
+    public ViewImpl() {
         super("My View");
 
-        this.controller = controller;
 
         setSize(400, 60);
         setResizable(false);
@@ -55,6 +54,11 @@ class ViewImpl extends JFrame implements ActionListener, View {
 
     public void update(Model model) {
         LoggerMonitor.getInstance().log("View.update");
+    }
+
+    @Override
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }
 
