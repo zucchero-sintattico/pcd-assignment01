@@ -26,6 +26,11 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+        System.out.println("Done");
+        System.out.println("Total number of files: " + model.getNumberOfFiles());
+        System.out.println("Top stats: " + model.getTop());
+        System.out.println("Distribution: " + model.getDistribution());
+
     }
 }
 
