@@ -1,6 +1,7 @@
 package assignment.mvc;
 
 import assignment.algorithm.AlgorithmConfiguration;
+import assignment.algorithm.AlgorithmStatus;
 import assignment.algorithm.AssignmentAlgorithm;
 import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
@@ -18,11 +19,16 @@ public class ControllerImpl implements Controller{
     private Model model;
     private final AlgorithmConfiguration config;
     private AssignmentAlgorithm algorithm;
+    private AlgorithmStatus status;
     private View view;
 
 
     public ControllerImpl(Model model, Path path) {
         this.model = model;
+        this.model.registerOnTopNChange((topN) -> this.view.updateTopN(topN));
+        this.model.registerOnDistributionChange((distribution) -> this.view.updateDistribution(distribution));
+        this.model.registerOnNumberOfFilesChange((numberOfFiles) -> this.view.updateNumberOfFiles(numberOfFiles));
+
         this.config = AlgorithmConfiguration.builder()
                 .withNumberOfPathProducer(NUMBER_OF_PATH_PRODUCER)
                 .withNumberOfPathConsumer(NUMBER_OF_PATH_CONSUMER)
@@ -35,9 +41,13 @@ public class ControllerImpl implements Controller{
         switch (actionCommand) {
             case "start":
                 startAlgorithm(this.config);
+                this.status = AlgorithmStatus.RUNNING;
+                this.view.updateAlgorithmStatus(this.status);
                 break;
             case "stop":
                 stopAlgorithm();
+                this.status = AlgorithmStatus.STOPPED;
+                this.view.updateAlgorithmStatus(this.status);
                 break;
             default:
                 this.logger.log("Unknown action command: " + actionCommand);
