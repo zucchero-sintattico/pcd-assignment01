@@ -9,7 +9,7 @@ import assignment.queue.StatisticQueue;
 import lib.synchronization.ActionBarrier;
 import lib.synchronization.Barrier;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -27,10 +27,10 @@ public class AssignmentAlgorithm {
     private final Set<StatisticConsumer> statisticConsumers;
 
 
-    public AssignmentAlgorithm(final Model model, final String path, final AlgorithmConfiguration configuration) {
+    public AssignmentAlgorithm(final Model model, final Path path, final AlgorithmConfiguration configuration) {
         this.statisticsBarrier = new ActionBarrier(configuration.numberOfPathConsumer, statisticQueue::close);
         this.pathProducers = createAgents(configuration.numberOfPathProducer,
-                () -> new PathProducer(pathQueue, Paths.get(path))
+                () -> new PathProducer(pathQueue, path)
         );
         this.pathConsumers = createAgents(configuration.numberOfPathConsumer,
                 () -> new PathConsumer(pathQueue, statisticQueue, statisticsBarrier)
