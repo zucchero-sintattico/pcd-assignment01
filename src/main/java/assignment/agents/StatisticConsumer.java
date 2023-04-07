@@ -4,12 +4,16 @@ import assignment.Statistic;
 import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
 import assignment.queue.StatisticQueue;
+import assignment.mvc.Model;
 import lib.architecture.QueueConsumerThread;
+
 
 /**
  * Consumes statistics from the queue.
  */
 public class StatisticConsumer extends QueueConsumerThread<Statistic> {
+
+    private Model model;
     private final Logger logger = LoggerMonitor.getInstance();
 
     public StatisticConsumer(final StatisticQueue queue) {

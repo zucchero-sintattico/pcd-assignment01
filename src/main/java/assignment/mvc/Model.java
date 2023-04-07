@@ -1,12 +1,17 @@
 package assignment.mvc;
 
 import assignment.Statistic;
-import lib.synchronization.QueueMonitor;
+import lib.architecture.Consumer;
+
+import java.util.List;
 
 public interface Model {
-    QueueMonitor<Statistic> getState();
+    List<Statistic> getState();
 
-    void addObserver(ModelObserver obs);
+    void addStatistic(Statistic statistic);
 
-    void update();
+    void registerOnTopNChange(Consumer<List<Statistic>> consumer);
+
+    void registerOnDistributionChange(Consumer<List<Statistic>> consumer);
+
 }

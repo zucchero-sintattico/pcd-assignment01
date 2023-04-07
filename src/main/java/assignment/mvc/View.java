@@ -1,11 +1,20 @@
 package assignment.mvc;
 
+import assignment.Statistic;
+import assignment.algorithm.AlgorithmStatus;
+
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 public interface View {
-    void update(Model model);
 
     void setController(Controller controller);
 
-    void actionPerformed(ActionEvent actionCommand);
+    void updateAlgorithmStatus(AlgorithmStatus status);
+
+    void updateTopN(List<Statistic> stats);
+
+    void updateDistribution(List<Statistic> stats);
+
+
 }
