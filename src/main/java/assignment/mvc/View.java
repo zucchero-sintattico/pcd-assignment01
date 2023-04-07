@@ -16,4 +16,6 @@ public interface View {
     void updateTopN(List<Statistic> stats);
 
     void updateDistribution(Map<Range, Integer> distribution);
+
+    void updateNumberOfFiles(int numberOfFiles);
 }
