@@ -8,5 +8,6 @@ public class MainSemplified {
         QueueMonitor<Integer> queue = new QueueMonitor<>();
         StopMonitor stopMonitor = new StopMonitor();
         PathProducerSemplified producer = new PathProducerSemplified(queue, stopMonitor);
+        producer.start();
     }
 }
