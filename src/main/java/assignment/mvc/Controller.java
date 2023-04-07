@@ -5,7 +5,7 @@ import assignment.algorithm.AlgorithmConfiguration;
 public interface Controller {
     void processEvent(String actionCommand);
 
-    void setView(ViewImpl view);
+    void setView(View view);
 
     void startAlgorithm(AlgorithmConfiguration configuration);
 
