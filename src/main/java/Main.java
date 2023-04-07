@@ -1,5 +1,8 @@
 import assignment.algorithm.AlgorithmConfiguration;
 import assignment.algorithm.AssignmentAlgorithm;
+import assignment.mvc.Model;
+import assignment.mvc.ModelConfiguration;
+import assignment.mvc.ModelImpl;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,7 +15,9 @@ public class Main {
 
         final String path = "src/main/java/";
 
-        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(null, path, configuration);
+        final ModelConfiguration modelConfiguration = new ModelConfiguration(10, 5, 1000);
+        final Model model = new ModelImpl(modelConfiguration);
+        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(model, path, configuration);
 
         algorithm.start();
         try {
