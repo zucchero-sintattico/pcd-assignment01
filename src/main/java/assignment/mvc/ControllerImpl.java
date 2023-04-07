@@ -14,9 +14,9 @@ public class ControllerImpl implements Controller {
     public static final int NUMBER_OF_PATH_PRODUCER = 1;
     public static final int NUMBER_OF_PATH_CONSUMER = 5;
     public static final int NUMBER_OF_STATISTICS_CONSUMER = 1;
-    private Logger logger = LoggerMonitor.getInstance();
-    private Path path;
-    private Model model;
+    private final Logger logger = LoggerMonitor.getInstance();
+    private final Path path;
+    private final Model model;
     private final AlgorithmConfiguration config;
     private AssignmentAlgorithm algorithm;
     private AlgorithmStatus status;
