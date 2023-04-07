@@ -34,6 +34,7 @@ public class ControllerImpl implements Controller{
                 .withNumberOfPathConsumer(NUMBER_OF_PATH_CONSUMER)
                 .withNumberOfStatisticsConsumer(NUMBER_OF_STATISTICS_CONSUMER)
                 .build();
+        this.logger.log("Controller created, AlgorithmConfiguration: " + this.config);
     }
 
     @Override
@@ -46,6 +47,7 @@ public class ControllerImpl implements Controller{
         this.algorithm = new AssignmentAlgorithm(this.model, this.path, this.config);
         this.algorithm.start();
         this.status = AlgorithmStatus.RUNNING;
+        this.logger.log("Algorithm started");
         this.view.updateAlgorithmStatus(this.status);
     }
 
@@ -54,6 +56,7 @@ public class ControllerImpl implements Controller{
         try {
             this.algorithm.join();
             this.status = AlgorithmStatus.STOPPED;
+            this.logger.log("Algorithm stopped");
             this.view.updateAlgorithmStatus(this.status);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
