@@ -13,7 +13,10 @@ public interface Model {
     List<Statistic> getTop();
     Map<Range, Integer> getDistribution();
 
+    void setConfiguration(ModelConfiguration configuration);
+
     void addStatistic(Statistic statistic);
+
     void registerOnNumberOfFilesChange(NumberOfFilesChangeListener listener);
     void registerOnTopNChange(TopChangeListener listener);
     void registerOnDistributionChange(DistributionChangeListener listener);
