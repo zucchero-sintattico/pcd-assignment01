@@ -5,6 +5,7 @@ import assignment.algorithm.AlgorithmStatus;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.Map;
 
 public interface View {
 
@@ -14,6 +15,5 @@ public interface View {
 
     void updateTopN(List<Statistic> stats);
 
-    void updateDistribution(List<Statistic> stats);
-
+    void updateDistribution(Map<Range, Integer> distribution);
 }
