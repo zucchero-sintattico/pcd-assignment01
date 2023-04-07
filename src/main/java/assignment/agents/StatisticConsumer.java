@@ -6,6 +6,7 @@ import assignment.logger.LoggerMonitor;
 import assignment.queue.StatisticQueue;
 import assignment.mvc.model.Model;
 import lib.architecture.QueueConsumerThread;
+import lib.synchronization.StopMonitor;
 
 
 /**
@@ -16,13 +17,18 @@ public class StatisticConsumer extends QueueConsumerThread<Statistic> {
     private final Model model;
     private final Logger logger = LoggerMonitor.getInstance();
 
-    public StatisticConsumer(final StatisticQueue queue, final Model model) {
-        super(queue);
+    public StatisticConsumer(final StatisticQueue queue, final Model model, final StopMonitor stopMonitor) {
+        super(queue, stopMonitor);
         this.model = model;
     }
 
     @Override
     public void consume(final Statistic value) {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         this.logger.log("Consuming " + value);
         this.model.addStatistic(value);
     }

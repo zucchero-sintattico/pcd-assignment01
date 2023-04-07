@@ -4,6 +4,7 @@ import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
 import lib.architecture.QueueProducerThread;
 import lib.synchronization.QueueMonitor;
+import lib.synchronization.StopMonitor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,13 +16,14 @@ import java.util.stream.Stream;
  * Once the scan is finished, close the queue.
  */
 public class PathProducer extends QueueProducerThread<Path> {
-
     private final Logger logger = LoggerMonitor.getInstance();
+    private final StopMonitor stopMonitor;
     private final Path path;
 
-    public PathProducer(QueueMonitor<Path> queue, Path path) {
+    public PathProducer(QueueMonitor<Path> queue, Path path, final StopMonitor stopMonitor) {
         super(queue);
         this.path = path;
+        this.stopMonitor = stopMonitor;
     }
 
     @Override
@@ -31,8 +33,17 @@ public class PathProducer extends QueueProducerThread<Path> {
             pathStream.filter(Files::isRegularFile)
                     .filter(p -> p.toString().endsWith(".java"))
                     .forEach((f) -> {
-                        this.produce(f);
-                        this.logger.log("Produced " + f);
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (this.stopMonitor.hasToBeStopped()) {
+                            this.closeQueue();
+                        } else {
+                            this.produce(f);
+                            this.logger.log("Produced " + f);
+                        }
                     });
         } catch (IOException e) {
             System.out.println(e.getMessage());

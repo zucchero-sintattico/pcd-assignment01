@@ -77,6 +77,11 @@ public class ViewImpl extends JFrame implements ActionListener, View{
     }
 
     @Override
+    public void updateNumberOfFiles(int numberOfFiles) {
+
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         try {
             controller.processEvent(e.getActionCommand());

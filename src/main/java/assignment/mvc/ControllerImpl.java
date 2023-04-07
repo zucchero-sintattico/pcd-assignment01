@@ -9,7 +9,7 @@ import assignment.mvc.model.Model;
 
 import java.nio.file.Path;
 
-public class ControllerImpl implements Controller{
+public class ControllerImpl implements Controller {
 
     public static final int NUMBER_OF_PATH_PRODUCER = 1;
     public static final int NUMBER_OF_PATH_CONSUMER = 5;

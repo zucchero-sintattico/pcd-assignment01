@@ -4,6 +4,9 @@ import assignment.mvc.model.Model;
 import assignment.mvc.model.ModelConfiguration;
 import assignment.mvc.model.ModelImpl;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -13,13 +16,20 @@ public class Main {
                 .withNumberOfStatisticsConsumer(1)
                 .build();
 
-        final String path = "src/main/java/";
+        final Path path = Paths.get("src/main/java/");
 
         final ModelConfiguration modelConfiguration = new ModelConfiguration(10, 5, 1000);
-        final Model model = new ModelImpl(modelConfiguration);
+        final Model model = new ModelImpl();
+        model.setConfiguration(modelConfiguration);
         final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(model, path, configuration);
 
         algorithm.start();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        algorithm.stop();
         try {
             algorithm.join();
         } catch (InterruptedException e) {

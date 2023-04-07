@@ -8,6 +8,7 @@ import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.synchronization.ActionBarrier;
 import lib.synchronization.Barrier;
+import lib.synchronization.StopMonitor;
 
 import java.nio.file.Path;
 import java.util.Set;
@@ -21,6 +22,7 @@ public class AssignmentAlgorithm {
     private final PathQueue pathQueue = new PathQueue();
     private final StatisticQueue statisticQueue = new StatisticQueue();
     private final Barrier statisticsBarrier;
+    private final StopMonitor stopMonitor;
 
     private final Set<PathProducer> pathProducers;
     private final Set<PathConsumer> pathConsumers;
@@ -29,14 +31,15 @@ public class AssignmentAlgorithm {
 
     public AssignmentAlgorithm(final Model model, final Path path, final AlgorithmConfiguration configuration) {
         this.statisticsBarrier = new ActionBarrier(configuration.numberOfPathConsumer, statisticQueue::close);
+        this.stopMonitor = new StopMonitor();
         this.pathProducers = createAgents(configuration.numberOfPathProducer,
-                () -> new PathProducer(pathQueue, path)
+                () -> new PathProducer(pathQueue, path, stopMonitor)
         );
         this.pathConsumers = createAgents(configuration.numberOfPathConsumer,
-                () -> new PathConsumer(pathQueue, statisticQueue, statisticsBarrier)
+                () -> new PathConsumer(pathQueue, statisticQueue, statisticsBarrier, stopMonitor)
         );
         this.statisticConsumers = createAgents(configuration.numberOfStatisticsConsumer,
-                () -> new StatisticConsumer(statisticQueue, model)
+                () -> new StatisticConsumer(statisticQueue, model, stopMonitor)
         );
     }
 
@@ -50,6 +53,10 @@ public class AssignmentAlgorithm {
         statisticConsumers.forEach(Thread::start);
         pathConsumers.forEach(Thread::start);
         pathProducers.forEach(Thread::start);
+    }
+
+    public void stop() {
+        stopMonitor.stop();
     }
 
     public void join() throws InterruptedException {

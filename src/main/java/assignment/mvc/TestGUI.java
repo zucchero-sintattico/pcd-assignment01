@@ -8,7 +8,8 @@ public class TestGUI {
     static public void main(String[] args) {
 
         final ModelConfiguration modelConfiguration = new ModelConfiguration(10, 5, 1000);
-        final Model model = new ModelImpl(modelConfiguration);
+        final Model model = new ModelImpl();
+        model.setConfiguration(modelConfiguration);
         //Controller controller = new ControllerImpl(model);
         //ViewImpl view = new ViewImpl(controller);
         //view.setController(controller);
