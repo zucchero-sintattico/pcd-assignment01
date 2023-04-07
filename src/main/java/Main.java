@@ -4,6 +4,8 @@ import assignment.mvc.model.Model;
 import assignment.mvc.model.ModelConfiguration;
 import assignment.mvc.model.ModelImpl;
 
+import java.nio.file.Paths;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -16,8 +18,8 @@ public class Main {
         final String path = "src/main/java/";
 
         final ModelConfiguration modelConfiguration = new ModelConfiguration(10, 5, 1000);
-        final Model model = new ModelImpl(modelConfiguration);
-        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(model, path, configuration);
+        final Model model = new ModelImpl();
+        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(model, Paths.get(path), configuration);
 
         algorithm.start();
         try {

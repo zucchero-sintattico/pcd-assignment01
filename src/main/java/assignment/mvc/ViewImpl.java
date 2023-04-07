@@ -90,7 +90,12 @@ public class ViewImpl extends JFrame implements ActionListener, View{
     public void actionPerformed(ActionEvent e) {
         try {
             System.out.println("Action performed: " + e.getActionCommand());
-            controller.processEvent(e.getActionCommand());
+            if (e.getActionCommand().equals("start")) {
+                controller.startAlgorithm();
+            } else if (e.getActionCommand().equals("stop")){
+                controller.stopAlgorithm();
+            }
+
         } catch (Exception ex) {
         }
     }
