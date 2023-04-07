@@ -13,16 +13,18 @@ import lib.architecture.QueueConsumerThread;
  */
 public class StatisticConsumer extends QueueConsumerThread<Statistic> {
 
-    private Model model;
+    private final Model model;
     private final Logger logger = LoggerMonitor.getInstance();
 
-    public StatisticConsumer(final StatisticQueue queue) {
+    public StatisticConsumer(final StatisticQueue queue, final Model model) {
         super(queue);
+        this.model = model;
     }
 
     @Override
-    public void consume(Statistic value) {
+    public void consume(final Statistic value) {
         this.logger.log("Consuming " + value);
+        this.model.addStatistic(value);
     }
 
     @Override
