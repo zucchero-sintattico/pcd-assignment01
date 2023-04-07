@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+interface TopChangeListener extends Consumer<List<Statistic>> {}
+interface DistributionChangeListener extends Consumer<Map<Range, Integer>> {}
+
 public interface Model {
     Integer getNumberOfFiles();
     List<Statistic> getTop();
     Map<Range, Integer> getDistribution();
 
     void addStatistic(Statistic statistic);
-    void registerOnTopNChange(Consumer<List<Statistic>> consumer);
-    void registerOnDistributionChange(Consumer<List<Statistic>> consumer);
-
+    void registerOnTopNChange(TopChangeListener listener);
+    void registerOnDistributionChange(DistributionChangeListener listener);
 }
