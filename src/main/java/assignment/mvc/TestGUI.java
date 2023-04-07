@@ -1,5 +1,7 @@
 package assignment.mvc;
 
+import assignment.mvc.controller.Controller;
+import assignment.mvc.controller.ControllerImpl;
 import assignment.mvc.model.Model;
 import assignment.mvc.model.ModelConfiguration;
 import assignment.mvc.model.ModelImpl;

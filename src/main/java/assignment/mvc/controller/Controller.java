@@ -1,6 +1,7 @@
-package assignment.mvc;
+package assignment.mvc.controller;
 
 import assignment.algorithm.AlgorithmConfiguration;
+import assignment.mvc.View;
 
 public interface Controller {
 

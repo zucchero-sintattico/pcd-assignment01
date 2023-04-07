@@ -2,6 +2,7 @@ package assignment.mvc;
 
 import assignment.Statistic;
 import assignment.algorithm.AlgorithmStatus;
+import assignment.mvc.controller.Controller;
 import assignment.mvc.model.Range;
 
 import java.util.List;
