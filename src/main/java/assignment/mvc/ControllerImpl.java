@@ -53,13 +53,9 @@ public class ControllerImpl implements Controller {
 
     @Override
     public void stopAlgorithm() {
-        try {
-            this.algorithm.join();
-            this.status = AlgorithmStatus.STOPPED;
-            this.logger.log("Algorithm stopped");
-            this.view.updateAlgorithmStatus(this.status);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        this.algorithm.stop();
+        this.status = AlgorithmStatus.STOPPED;
+        this.logger.log("Algorithm stopped");
+        this.view.updateAlgorithmStatus(this.status);
     }
 }
