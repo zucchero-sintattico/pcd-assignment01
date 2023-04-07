@@ -33,7 +33,7 @@ public class ModelImpl implements Model {
 
     private void insertTopSorted(Statistic statistic) {
         this.topStats.add(statistic);
-        this.topStats.sort(Comparator.comparingInt(x -> x.linesCount));
+        this.topStats.sort(Comparator.comparingInt(x -> -x.linesCount));
     }
     @Override
     public void addStatistic(Statistic statistic) {
