@@ -1,7 +1,6 @@
 package assignment.mvc;
 
 import assignment.algorithm.AlgorithmConfiguration;
-import assignment.algorithm.AlgorithmConfigurationBuilder;
 import assignment.algorithm.AssignmentAlgorithm;
 import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
@@ -10,18 +9,23 @@ import java.nio.file.Path;
 
 public class ControllerImpl implements Controller{
 
+    public static final int NUMBER_OF_PATH_PRODUCER = 1;
+    public static final int NUMBER_OF_PATH_CONSUMER = 5;
+    public static final int NUMBER_OF_STATISTICS_CONSUMER = 1;
     private Logger logger = LoggerMonitor.getInstance();
     private Path path;
     private Model model;
     private final AlgorithmConfiguration config;
-
     private AssignmentAlgorithm algorithm;
+    private View view;
+
+
     public ControllerImpl(Model model, Path path) {
         this.model = model;
         this.config = AlgorithmConfiguration.builder()
-                .withNumberOfPathProducer(1)
-                .withNumberOfPathConsumer(5)
-                .withNumberOfStatisticsConsumer(1)
+                .withNumberOfPathProducer(NUMBER_OF_PATH_PRODUCER)
+                .withNumberOfPathConsumer(NUMBER_OF_PATH_CONSUMER)
+                .withNumberOfStatisticsConsumer(NUMBER_OF_STATISTICS_CONSUMER)
                 .build();
         this.path = path;
     }
@@ -41,12 +45,12 @@ public class ControllerImpl implements Controller{
 
     @Override
     public void setView(View view) {
-
+        this.view = view;
     }
 
     @Override
     public void startAlgorithm(AlgorithmConfiguration configuration) {
-        this.algorithm = new AssignmentAlgorithm(null, this.path, configuration);
+        this.algorithm = new AssignmentAlgorithm(this.model, this.path, configuration);
     }
 
     @Override
