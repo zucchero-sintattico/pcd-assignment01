@@ -20,6 +20,7 @@ public class Main {
 
         final ModelConfiguration modelConfiguration = new ModelConfiguration(10, 5, 1000);
         final Model model = new ModelImpl();
+
         model.setConfiguration(modelConfiguration);
         final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(model, path, configuration);
 

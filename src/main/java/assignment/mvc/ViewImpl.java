@@ -20,6 +20,9 @@ public class ViewImpl extends JFrame implements ActionListener, View{
     private AlgorithmStatus status;
     private List<Statistic> topN;
     private Map<Range, Integer> distribution;
+
+    private int numberOfFiles;
+
     public ViewImpl(Controller controller) {
         super("Assignment 1 view");
 
@@ -28,10 +31,10 @@ public class ViewImpl extends JFrame implements ActionListener, View{
         setSize(200, 400);
         setResizable(true);
 
-        JButton button1 = new JButton("Start");
+        JButton button1 = new JButton("start");
         button1.addActionListener(this);
 
-        JButton button2 = new JButton("Stop");
+        JButton button2 = new JButton("stop");
         button2.addActionListener(this);
 
         JTextField NumberOfRanges = new JTextField(10);
@@ -46,6 +49,8 @@ public class ViewImpl extends JFrame implements ActionListener, View{
         panel.add(NumberOfRanges);
         panel.add(maxRange);
         panel.add(state);
+        //text under the button
+        panel.add(new JLabel("Number of files: " + numberOfFiles));
 
         setLayout(new BorderLayout());
         add(panel,BorderLayout.NORTH);
@@ -78,13 +83,19 @@ public class ViewImpl extends JFrame implements ActionListener, View{
 
     @Override
     public void updateNumberOfFiles(int numberOfFiles) {
-
+        this.numberOfFiles = numberOfFiles;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            controller.processEvent(e.getActionCommand());
+            System.out.println("Action performed: " + e.getActionCommand());
+            if (e.getActionCommand().equals("start")) {
+                controller.startAlgorithm();
+            } else if (e.getActionCommand().equals("stop")){
+                controller.stopAlgorithm();
+            }
+
         } catch (Exception ex) {
         }
     }
