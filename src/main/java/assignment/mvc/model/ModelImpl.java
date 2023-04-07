@@ -1,9 +1,9 @@
-package assignment.mvc;
+package assignment.mvc.model;
 
 import assignment.Statistic;
-import assignment.mvc.listeners.DistributionChangeListener;
-import assignment.mvc.listeners.NumberOfFilesChangeListener;
-import assignment.mvc.listeners.TopChangeListener;
+import assignment.mvc.model.listeners.DistributionChangeListener;
+import assignment.mvc.model.listeners.NumberOfFilesChangeListener;
+import assignment.mvc.model.listeners.TopChangeListener;
 
 import java.util.*;
 
@@ -17,9 +17,10 @@ public class ModelImpl implements Model {
     private final List<Statistic> topStats = new ArrayList<>();
     private final Map<Range, Integer> distribution = new HashMap<>();
 
-    private final ModelConfiguration configuration;
+    private ModelConfiguration configuration;
 
-    public ModelImpl(ModelConfiguration configuration) {
+    @Override
+    public void setConfiguration(ModelConfiguration configuration) {
         this.configuration = configuration;
 
         // Build ranges
@@ -28,13 +29,13 @@ public class ModelImpl implements Model {
             this.distribution.put(new Range(i * rangeSize, (i + 1) * rangeSize), 0);
         }
         this.distribution.put(new Range(this.configuration.nl * rangeSize, Integer.MAX_VALUE), 0);
-        System.out.println(this.distribution);
     }
 
     private void insertTopSorted(Statistic statistic) {
         this.topStats.add(statistic);
         this.topStats.sort(Comparator.comparingInt(x -> -x.linesCount));
     }
+
     @Override
     public void addStatistic(Statistic statistic) {
         this.allStats.add(statistic);
@@ -62,7 +63,6 @@ public class ModelImpl implements Model {
             }
         }
     }
-
     @Override
     public Integer getNumberOfFiles() {
         return this.allStats.size();
@@ -71,6 +71,7 @@ public class ModelImpl implements Model {
     public List<Statistic> getTop() {
         return Collections.unmodifiableList(this.topStats);
     }
+
     @Override
     public Map<Range, Integer> getDistribution() {
         return Collections.unmodifiableMap(this.distribution);

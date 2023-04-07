@@ -5,6 +5,7 @@ import assignment.algorithm.AlgorithmStatus;
 import assignment.algorithm.AssignmentAlgorithm;
 import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
+import assignment.mvc.model.Model;
 
 import java.nio.file.Path;
 

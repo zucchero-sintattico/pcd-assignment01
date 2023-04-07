@@ -1,4 +1,4 @@
-package assignment.mvc;
+package assignment.mvc.model;
 
 import java.util.Objects;
 

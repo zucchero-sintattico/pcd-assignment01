@@ -1,8 +1,8 @@
 import assignment.algorithm.AlgorithmConfiguration;
 import assignment.algorithm.AssignmentAlgorithm;
-import assignment.mvc.Model;
-import assignment.mvc.ModelConfiguration;
-import assignment.mvc.ModelImpl;
+import assignment.mvc.model.Model;
+import assignment.mvc.model.ModelConfiguration;
+import assignment.mvc.model.ModelImpl;
 
 public class Main {
     public static void main(String[] args) {

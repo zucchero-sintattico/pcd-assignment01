@@ -4,7 +4,7 @@ import assignment.Statistic;
 import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
 import assignment.queue.StatisticQueue;
-import assignment.mvc.Model;
+import assignment.mvc.model.Model;
 import lib.architecture.QueueConsumerThread;
 
 

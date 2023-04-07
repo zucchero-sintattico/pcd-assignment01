@@ -3,7 +3,7 @@ package assignment.algorithm;
 import assignment.agents.PathConsumer;
 import assignment.agents.PathProducer;
 import assignment.agents.StatisticConsumer;
-import assignment.mvc.Model;
+import assignment.mvc.model.Model;
 import assignment.queue.PathQueue;
 import assignment.queue.StatisticQueue;
 import lib.synchronization.ActionBarrier;
