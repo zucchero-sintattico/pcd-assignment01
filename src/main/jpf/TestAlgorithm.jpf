@@ -1,4 +1,4 @@
-target = Main
+target = assignment.jpf.MainSimplified
 
 classpath=build/classes/java/main
 
