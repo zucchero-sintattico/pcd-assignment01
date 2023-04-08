@@ -7,6 +7,7 @@ import assignment.mvc.model.Range;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.html.ListView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ public class ViewImpl extends JFrame implements ActionListener, View{
     private JLabel statusLabel;
     private JButton startButton;
     private JButton stopButton;
+    private JList<Statistic> topNList;
 
     public ViewImpl() {
         super("My View");
@@ -78,10 +80,6 @@ public class ViewImpl extends JFrame implements ActionListener, View{
         preferencesPanel.add(topNText);
 
 
-        JPanel resultsPanel = new JPanel();
-        resultsPanel.setBackground(Color.GREEN);
-        resultsPanel.setPreferredSize(new Dimension(400, 100));
-
         JPanel statusPanel = new JPanel();
         statusPanel.setBackground(Color.BLUE);
         statusPanel.setPreferredSize(new Dimension(400, 100));
@@ -89,9 +87,10 @@ public class ViewImpl extends JFrame implements ActionListener, View{
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         // creo il panel B
-        resultsPanel = new JPanel();
+        JPanel resultsPanel = new JPanel();
         resultsPanel.setLayout(new GridLayout(x, 2)); // x righe e 2 colonne
-        resultsPanel.setBorder(new TitledBorder("Panel B"));
+        resultsPanel.setBorder(new TitledBorder("Results Panel"));
+        resultsPanel.setPreferredSize(new Dimension(400, 100));
         for (int i = 0; i < x; i++) {
             // aggiungo una coppia di JLabel e JText per ogni riga
             JLabel label = new JLabel("Label " + (i + 1));
@@ -100,10 +99,14 @@ public class ViewImpl extends JFrame implements ActionListener, View{
             resultsPanel.add(text);
         }
 
+        topNList = new JList<>();
+        resultsPanel.add(topNList);
+
+
         // creo il panel C
         statusPanel = new JPanel();
         statusPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); // allineo i componenti a destra
-        statusPanel.setBorder(new TitledBorder("Panel C"));
+        statusPanel.setBorder(new TitledBorder("Status Panel"));
 
         numberOfFilesLabel = new JLabel("0");
 
@@ -178,7 +181,7 @@ public class ViewImpl extends JFrame implements ActionListener, View{
     @Override
     public void updateTopN(List<Statistic> stats) {
         SwingUtilities.invokeLater(() -> {
-
+            topNList.setListData(stats.toArray(new Statistic[0]));
         });
     }
 

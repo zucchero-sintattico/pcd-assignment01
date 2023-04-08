@@ -19,7 +19,7 @@ public class ControllerImpl implements Controller {
     public static final int NUMBER_OF_STATISTICS_CONSUMER = 1;
     private final Logger logger = LoggerMonitor.getInstance();
     private final Model model;
-    private AlgorithmConfiguration config;
+    private final AlgorithmConfiguration config;
     private AssignmentAlgorithm algorithm;
     private AlgorithmStatus status;
     private View view;
