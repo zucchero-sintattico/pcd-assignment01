@@ -25,7 +25,7 @@ public class TestGUI {
 }
 
 ////////////////////////////////////////////////////7
-
+/*
 package pcd.lab04.gui4_mvc_nodeadlock;
 
 public class TestGUI {
@@ -46,3 +46,4 @@ public class TestGUI {
     }
 
 }
+*/

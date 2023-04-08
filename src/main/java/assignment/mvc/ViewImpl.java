@@ -105,6 +105,7 @@ public class ViewImpl extends JFrame implements ActionListener, View{
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+/*
 package pcd.lab04.gui4_mvc_nodeadlock;
 
         import java.awt.*;
@@ -270,6 +271,6 @@ class MyView extends JFrame implements ActionListener, ModelObserver {
         }
     }
 }
-
+*/
 
 

@@ -3,44 +3,68 @@ import assignment.algorithm.AssignmentAlgorithm;
 import assignment.mvc.model.Model;
 import assignment.mvc.model.ModelConfiguration;
 import assignment.mvc.model.ModelImpl;
+import assignment.mvc.model.Range;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+class AlgorithmTest {
+
+    final Path path;
+    final Range pathConsumerRange;
+
+    public AlgorithmTest(final Path path, final Range pathConsumerRange) {
+        this.path = path;
+        this.pathConsumerRange = pathConsumerRange;
+    }
+
+    public void run() {
+        for (int i = pathConsumerRange.getStart(); i <= pathConsumerRange.getEnd(); i++) {
+            // Capture the output of standard output
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PrintStream ps = new PrintStream(baos);
+            // IMPORTANT: Save the old System.out!
+            PrintStream old = System.out;
+            // Tell Java to use your special stream
+            System.setOut(ps);
+
+            final AlgorithmConfiguration configuration = AlgorithmConfiguration.builder()
+                    .withNumberOfPathProducer(1)
+                    .withNumberOfPathConsumer(i)
+                    .withNumberOfStatisticsConsumer(1)
+                    .build();
+            final Model model = new ModelImpl();
+            model.setConfiguration(new ModelConfiguration(10, 5, 1000));
+            final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(model, path, configuration);
+            final long start = System.currentTimeMillis();
+            algorithm.start();
+            try {
+                algorithm.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            final long end = System.currentTimeMillis();
+            // Restore the standard output
+            System.out.flush();
+            System.setOut(old);
+
+            System.out.println(
+                    "Done with " + i + " path consumers in " + (end - start) + " ms -- Found " +
+                            model.getNumberOfFiles() + " files + ");
+        }
+    }
+}
 
 public class Main {
     public static void main(String[] args) {
 
-        final AlgorithmConfiguration configuration = AlgorithmConfiguration.builder()
-                .withNumberOfPathProducer(1)
-                .withNumberOfPathConsumer(5)
-                .withNumberOfStatisticsConsumer(1)
-                .build();
+        final Path path = Paths.get("generator");
+        final Range pathConsumerRange = new Range(1, 100);
 
-        final Path path = Paths.get("src/main/java/");
-
-        final ModelConfiguration modelConfiguration = new ModelConfiguration(10, 5, 1000);
-        final Model model = new ModelImpl();
-
-        model.setConfiguration(modelConfiguration);
-        final AssignmentAlgorithm algorithm = new AssignmentAlgorithm(model, path, configuration);
-
-        algorithm.start();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        algorithm.stop();
-        try {
-            algorithm.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        System.out.println("Done");
-        System.out.println("Total number of files: " + model.getNumberOfFiles());
-        System.out.println("Top stats: " + model.getTop());
-        System.out.println("Distribution: " + model.getDistribution());
+        final AlgorithmTest test = new AlgorithmTest(path, pathConsumerRange);
+        test.run();
 
     }
 }

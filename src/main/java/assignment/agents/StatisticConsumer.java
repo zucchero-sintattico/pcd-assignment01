@@ -3,8 +3,8 @@ package assignment.agents;
 import assignment.Statistic;
 import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
-import assignment.queue.StatisticQueue;
 import assignment.mvc.model.Model;
+import assignment.queue.StatisticQueue;
 import lib.architecture.QueueConsumerThread;
 import lib.synchronization.StopMonitor;
 
@@ -24,11 +24,13 @@ public class StatisticConsumer extends QueueConsumerThread<Statistic> {
 
     @Override
     public void consume(final Statistic value) {
+        /*
         try {
             Thread.sleep(10);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        */
         this.logger.log("Consuming " + value);
         this.model.addStatistic(value);
     }

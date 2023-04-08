@@ -33,11 +33,13 @@ public class PathProducer extends QueueProducerThread<Path> {
             pathStream.filter(Files::isRegularFile)
                     .filter(p -> p.toString().endsWith(".java"))
                     .forEach((f) -> {
+                        /*
                         try {
                             Thread.sleep(10);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
+                        */
                         if (this.stopMonitor.hasToBeStopped()) {
                             this.closeQueue();
                         } else {
