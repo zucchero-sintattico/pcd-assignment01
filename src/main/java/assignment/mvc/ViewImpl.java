@@ -28,82 +28,81 @@ public class ViewImpl extends JFrame implements ActionListener, View{
     private JButton startButton;
     private JButton stopButton;
 
-    public ViewImpl(Controller controller) {
+    public ViewImpl() {
         super("My View");
 
-        this.controller = controller;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
         setLocationRelativeTo(null);
 
-        JPanel panelA = new JPanel();
-        panelA.setLayout(new GridLayout(3, 2));
+        JPanel preferencesPanel = new JPanel();
+        preferencesPanel.setLayout(new GridLayout(3, 2));
 
-        JLabel label1 = new JLabel("Number of ranges:");
-        JTextField textField1 = new JTextField();
-        textField1.addActionListener(e -> {
+        JLabel nOfRangesLabel = new JLabel("Number of ranges:");
+        JTextField nOfRangesText = new JTextField();
+        nOfRangesText.addActionListener(e -> {
             try {
-                numberOfRanges = Integer.parseInt(textField1.getText());
+                numberOfRanges = Integer.parseInt(nOfRangesText.getText());
             } catch (NumberFormatException ex) {
                 // handle exception
             }
         });
 
-        JLabel label2 = new JLabel("Max number of lines:");
-        JTextField textField2 = new JTextField();
-        textField2.addActionListener(e -> {
+        JLabel maxLinesLabel = new JLabel("Max number of lines:");
+        JTextField maxLinesText = new JTextField();
+        maxLinesText.addActionListener(e -> {
             try {
-                maxNumberOfLines = Integer.parseInt(textField2.getText());
+                maxNumberOfLines = Integer.parseInt(maxLinesText.getText());
             } catch (NumberFormatException ex) {
                 // handle exception
             }
         });
 
-        JLabel label3 = new JLabel("Top N files number:");
-        JTextField textField3 = new JTextField();
-        textField3.addActionListener(e -> {
+        JLabel topNLabel = new JLabel("Top N files number:");
+        JTextField topNText = new JTextField();
+        topNText.addActionListener(e -> {
             try {
-                topNFilesNumber = Integer.parseInt(textField3.getText());
+                topNFilesNumber = Integer.parseInt(topNText.getText());
             } catch (NumberFormatException ex) {
                 // handle exception
             }
         });
 
-        panelA.add(label1);
-        panelA.add(textField1);
-        panelA.add(label2);
-        panelA.add(textField2);
-        panelA.add(label3);
-        panelA.add(textField3);
+        preferencesPanel.add(nOfRangesLabel);
+        preferencesPanel.add(nOfRangesText);
+        preferencesPanel.add(maxLinesLabel);
+        preferencesPanel.add(maxLinesText);
+        preferencesPanel.add(topNLabel);
+        preferencesPanel.add(topNText);
 
 
-        JPanel panelB = new JPanel();
-        panelB.setBackground(Color.GREEN);
-        panelB.setPreferredSize(new Dimension(400, 100));
+        JPanel resultsPanel = new JPanel();
+        resultsPanel.setBackground(Color.GREEN);
+        resultsPanel.setPreferredSize(new Dimension(400, 100));
 
-        JPanel panelC = new JPanel();
-        panelC.setBackground(Color.BLUE);
-        panelC.setPreferredSize(new Dimension(400, 100));
+        JPanel statusPanel = new JPanel();
+        statusPanel.setBackground(Color.BLUE);
+        statusPanel.setPreferredSize(new Dimension(400, 100));
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         // creo il panel B
-        panelB = new JPanel();
-        panelB.setLayout(new GridLayout(x, 2)); // x righe e 2 colonne
-        panelB.setBorder(new TitledBorder("Panel B"));
+        resultsPanel = new JPanel();
+        resultsPanel.setLayout(new GridLayout(x, 2)); // x righe e 2 colonne
+        resultsPanel.setBorder(new TitledBorder("Panel B"));
         for (int i = 0; i < x; i++) {
             // aggiungo una coppia di JLabel e JText per ogni riga
             JLabel label = new JLabel("Label " + (i + 1));
             JTextField text = new JTextField(10);
-            panelB.add(label);
-            panelB.add(text);
+            resultsPanel.add(label);
+            resultsPanel.add(text);
         }
 
         // creo il panel C
-        panelC = new JPanel();
-        panelC.setLayout(new FlowLayout(FlowLayout.RIGHT)); // allineo i componenti a destra
-        panelC.setBorder(new TitledBorder("Panel C"));
+        statusPanel = new JPanel();
+        statusPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); // allineo i componenti a destra
+        statusPanel.setBorder(new TitledBorder("Panel C"));
 
         numberOfFilesLabel = new JLabel("0");
 
@@ -128,23 +127,23 @@ public class ViewImpl extends JFrame implements ActionListener, View{
             }
         });
         // aggiungo i componenti al panel C
-        panelC.add(numberOfFilesLabel);
-        panelC.add(statusLabel);
-        panelC.add(startButton);
-        panelC.add(stopButton);
+        statusPanel.add(numberOfFilesLabel);
+        statusPanel.add(statusLabel);
+        statusPanel.add(startButton);
+        statusPanel.add(stopButton);
 
         // aggiungo i panel al frame
-        add(panelA, BorderLayout.NORTH);
-        add(panelB, BorderLayout.CENTER);
-        add(panelC, BorderLayout.SOUTH);
+        add(preferencesPanel, BorderLayout.NORTH);
+        add(resultsPanel, BorderLayout.CENTER);
+        add(statusPanel, BorderLayout.SOUTH);
 
         pack(); // adatto la dimensione del frame ai componenti
         setVisible(true); // rendo visibile il frame
 
 
-        add(panelA);
-        add(panelB);
-        add(panelC);
+        add(preferencesPanel);
+        add(resultsPanel);
+        add(statusPanel);
 
         setVisible(true);
 
@@ -161,7 +160,7 @@ public class ViewImpl extends JFrame implements ActionListener, View{
 
     @Override
     public void setController(Controller controller) {
-
+        this.controller = controller;
     }
 
     @Override
