@@ -152,13 +152,7 @@ public class ViewImpl extends JFrame implements ActionListener, View{
         });
     }
 
-       public void update(AlgorithmStatus status) {
-            if (status == AlgorithmStatus.RUNNING) {
-                statusLabel.setBackground(Color.GREEN);
-            } else if (status == AlgorithmStatus.STOPPED) {
-                statusLabel.setBackground(Color.RED);
-            }
-}
+
 
     @Override
     public void setController(Controller controller) {
@@ -167,7 +161,11 @@ public class ViewImpl extends JFrame implements ActionListener, View{
 
     @Override
     public void updateAlgorithmStatus(AlgorithmStatus status) {
-
+        if (status == AlgorithmStatus.RUNNING) {
+            statusLabel.setBackground(Color.GREEN);
+        } else if (status == AlgorithmStatus.STOPPED) {
+            statusLabel.setBackground(Color.RED);
+        }
     }
 
     @Override
