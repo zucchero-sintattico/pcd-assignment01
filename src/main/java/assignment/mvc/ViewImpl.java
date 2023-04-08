@@ -18,8 +18,6 @@ import java.util.Map;
 public class ViewImpl extends JFrame implements View {
 
     private Controller controller;
-    private JTextField state;
-    private int x; // il valore fornito dal panel A
     private final JLabel numberOfFilesLabel;
     private final JLabel statusLabel;
     private final JList<Statistic> topNList;
@@ -58,7 +56,7 @@ public class ViewImpl extends JFrame implements View {
 
         // creo il results panel
         JPanel resultsPanel = new JPanel();
-        resultsPanel.setLayout(new GridLayout(x, 2)); // x righe e 2 colonne
+        resultsPanel.setLayout(new GridLayout(0, 2)); // x righe e 2 colonne
         resultsPanel.setBorder(new TitledBorder("Results Panel"));
         resultsPanel.setPreferredSize(new Dimension(400, 100));
         topNList = new JList<>();
