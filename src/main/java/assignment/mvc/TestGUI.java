@@ -23,3 +23,26 @@ public class TestGUI {
         view.setVisible(true);
     }
 }
+
+////////////////////////////////////////////////////7
+
+package pcd.lab04.gui4_mvc_nodeadlock;
+
+public class TestGUI {
+    static public void main(String[] args){
+
+        MyModel model = new MyModel();
+        MyController controller = new MyController(model);
+        MyView view = new MyView(controller);
+        model.addObserver(view);
+        view.setVisible(true);
+        //view resizing
+        view.setSize(400, 400);
+        view.setResizable(true);
+
+
+        new MyAgent(model).start();
+
+    }
+
+}
