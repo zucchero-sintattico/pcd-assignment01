@@ -16,109 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ViewImpl extends JFrame implements ActionListener, View{
+
     private Controller controller;
-    private JTextField state;
-
-    private AlgorithmStatus status;
-    private List<Statistic> topN;
-    private Map<Range, Integer> distribution;
-
-    private int numberOfFiles;
-
-    public ViewImpl(Controller controller) {
-        super("Assignment 1 view");
-
-        this.controller = controller;
-
-        setSize(200, 400);
-        setResizable(true);
-
-        JButton button1 = new JButton("start");
-        button1.addActionListener(this);
-
-        JButton button2 = new JButton("stop");
-        button2.addActionListener(this);
-
-        JTextField NumberOfRanges = new JTextField(10);
-        JTextField maxRange = new JTextField(10);
-
-
-        state = new JTextField(10);
-
-        JPanel panel = new JPanel();
-        panel.add(button1);
-        panel.add(button2);
-        panel.add(NumberOfRanges);
-        panel.add(maxRange);
-        panel.add(state);
-        //text under the button
-        panel.add(new JLabel("Number of files: " + numberOfFiles));
-
-        setLayout(new BorderLayout());
-        add(panel,BorderLayout.NORTH);
-
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent ev) {
-                System.exit(-1);
-            }
-        });
-    }
-
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
-
-    @Override
-    public void updateAlgorithmStatus(AlgorithmStatus status) {
-        this.status = status;
-    }
-
-    @Override
-    public void updateTopN(List<Statistic> stats) {
-        this.topN = stats;
-    }
-
-    @Override
-    public void updateDistribution(Map<Range, Integer> distribution) {
-        this.distribution = distribution;
-    }
-
-    @Override
-    public void updateNumberOfFiles(int numberOfFiles) {
-        this.numberOfFiles = numberOfFiles;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
-            System.out.println("Action performed: " + e.getActionCommand());
-            if (e.getActionCommand().equals("start")) {
-                controller.startAlgorithm();
-            } else if (e.getActionCommand().equals("stop")){
-                controller.stopAlgorithm();
-            }
-
-        } catch (Exception ex) {
-        }
-    }
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////
-package pcd.lab04.gui4_mvc_nodeadlock;
-
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
-        import java.awt.event.WindowAdapter;
-        import java.awt.event.WindowEvent;
-
-        import javax.swing.*;
-        import javax.swing.border.TitledBorder;
-
-class MyView extends JFrame implements ActionListener, ModelObserver {
-
-    private MyController controller;
     private JTextField state;
     private int numberOfRanges = 0;
     private int maxNumberOfLines = 0;
@@ -128,7 +27,7 @@ class MyView extends JFrame implements ActionListener, ModelObserver {
     private JButton startButton;
     private JButton stopButton;
 
-    public MyView(MyController controller) {
+    public ViewImpl(Controller controller) {
         super("My View");
 
         this.controller = controller;
@@ -215,11 +114,13 @@ class MyView extends JFrame implements ActionListener, ModelObserver {
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 statusLabel.setBackground(Color.GREEN); // verde se start
+                controller.startAlgorithm();
             }
         });
         stopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 statusLabel.setBackground(Color.RED); // rosso se stop
+                controller.stopAlgorithm();
             }
         });
         // aggiungo i componenti al panel C
@@ -251,23 +152,42 @@ class MyView extends JFrame implements ActionListener, ModelObserver {
         });
     }
 
-    public void actionPerformed(ActionEvent ev) {
-        try {
-            controller.processEvent(ev.getActionCommand());
-        } catch (Exception ex) {
-        }
+       public void update(AlgorithmStatus status) {
+            if (status == AlgorithmStatus.RUNNING) {
+                statusLabel.setBackground(Color.GREEN);
+            } else if (status == AlgorithmStatus.STOPPED) {
+                statusLabel.setBackground(Color.RED);
+            }
+}
+
+    @Override
+    public void setController(Controller controller) {
+
     }
 
     @Override
-    public void modelUpdated(MyModel model) {
-        try {
-            System.out.println("[View] model updated => updating the view");
-            SwingUtilities.invokeLater(() -> {
-                state.setText("state: " + model.getState());
-            });
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+    public void updateAlgorithmStatus(AlgorithmStatus status) {
+
+    }
+
+    @Override
+    public void updateTopN(List<Statistic> stats) {
+
+    }
+
+    @Override
+    public void updateDistribution(Map<Range, Integer> distribution) {
+
+    }
+
+    @Override
+    public void updateNumberOfFiles(int numberOfFiles) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 }
 
