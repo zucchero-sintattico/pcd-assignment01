@@ -16,8 +16,8 @@ public class TestGUI {
         model.setConfiguration(modelConfiguration);
         final String path = "src/main/java/";
 
-        Controller controller = new ControllerImpl(model, Paths.get(path));
-        ViewImpl view = new ViewImpl(controller);
+        Controller controller = new ControllerImpl(model);
+        ViewImpl view = new ViewImpl();
         view.setController(controller);
         controller.setView(view);
         view.setVisible(true);

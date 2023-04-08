@@ -7,8 +7,10 @@ import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
 import assignment.mvc.View;
 import assignment.mvc.model.Model;
+import assignment.mvc.model.ModelConfiguration;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ControllerImpl implements Controller {
 
@@ -16,16 +18,14 @@ public class ControllerImpl implements Controller {
     public static final int NUMBER_OF_PATH_CONSUMER = 5;
     public static final int NUMBER_OF_STATISTICS_CONSUMER = 1;
     private final Logger logger = LoggerMonitor.getInstance();
-    private final Path path;
     private final Model model;
-    private final AlgorithmConfiguration config;
+    private AlgorithmConfiguration config;
     private AssignmentAlgorithm algorithm;
     private AlgorithmStatus status;
     private View view;
 
-    public ControllerImpl(Model model, Path path) {
+    public ControllerImpl(Model model) {
         this.model = model;
-        this.path = path;
         this.model.registerOnTopNChange((topN) -> this.view.updateTopN(topN));
         this.model.registerOnDistributionChange((distribution) -> this.view.updateDistribution(distribution));
         this.model.registerOnNumberOfFilesChange((numberOfFiles) -> this.view.updateNumberOfFiles(numberOfFiles));
@@ -44,9 +44,11 @@ public class ControllerImpl implements Controller {
     }
 
     @Override
-    public void startAlgorithm() {
+    public void startAlgorithm(Path path, int topN, int nOfIntervals, int maxL) {
         this.model.reset();
-        this.algorithm = new AssignmentAlgorithm(this.model, this.path, this.config);
+        ModelConfiguration modelConfiguration = new ModelConfiguration(topN, nOfIntervals, maxL);
+        this.model.setConfiguration(modelConfiguration);
+        this.algorithm = new AssignmentAlgorithm(this.model, path, this.config);
         this.algorithm.start();
         this.status = AlgorithmStatus.RUNNING;
         this.logger.log("Algorithm started");

@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -116,8 +117,10 @@ public class ViewImpl extends JFrame implements ActionListener, View{
         // aggiungo un listener ai bottoni per cambiare il colore del riquadro status
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                statusLabel.setBackground(Color.GREEN); // verde se start
-                controller.startAlgorithm();
+                if(!maxLinesText.getText().equals("") && !nOfRangesText.getText().equals("") && !topNText.getText().equals("")){
+                    statusLabel.setBackground(Color.GREEN); // verde se start
+                    controller.startAlgorithm(Paths.get("src/main/java/"), Integer.parseInt(topNText.getText()), Integer.parseInt(nOfRangesText.getText()), Integer.parseInt(maxLinesText.getText()));
+                }
             }
         });
         stopButton.addActionListener(new ActionListener() {
