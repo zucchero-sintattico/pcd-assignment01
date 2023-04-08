@@ -45,6 +45,7 @@ public class ControllerImpl implements Controller {
 
     @Override
     public void startAlgorithm() {
+        this.model.reset();
         this.algorithm = new AssignmentAlgorithm(this.model, this.path, this.config);
         this.algorithm.start();
         this.status = AlgorithmStatus.RUNNING;

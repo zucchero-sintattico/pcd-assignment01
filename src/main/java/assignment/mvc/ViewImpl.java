@@ -23,6 +23,7 @@ public class ViewImpl extends JFrame implements ActionListener, View{
     private int maxNumberOfLines = 0;
     private int topNFilesNumber = 0;
     private int x; // il valore fornito dal panel A
+    private JLabel numberOfFilesLabel;
     private JLabel statusLabel;
     private JButton startButton;
     private JButton stopButton;
@@ -103,6 +104,9 @@ public class ViewImpl extends JFrame implements ActionListener, View{
         panelC = new JPanel();
         panelC.setLayout(new FlowLayout(FlowLayout.RIGHT)); // allineo i componenti a destra
         panelC.setBorder(new TitledBorder("Panel C"));
+
+        numberOfFilesLabel = new JLabel("0");
+
         // creo il riquadro status
         statusLabel = new JLabel("Status: ");
         statusLabel.setOpaque(true); // rendo opaco il label per mostrare il colore di sfondo
@@ -124,6 +128,7 @@ public class ViewImpl extends JFrame implements ActionListener, View{
             }
         });
         // aggiungo i componenti al panel C
+        panelC.add(numberOfFilesLabel);
         panelC.add(statusLabel);
         panelC.add(startButton);
         panelC.add(stopButton);
@@ -170,7 +175,9 @@ public class ViewImpl extends JFrame implements ActionListener, View{
 
     @Override
     public void updateTopN(List<Statistic> stats) {
+        SwingUtilities.invokeLater(() -> {
 
+        });
     }
 
     @Override
@@ -180,7 +187,9 @@ public class ViewImpl extends JFrame implements ActionListener, View{
 
     @Override
     public void updateNumberOfFiles(int numberOfFiles) {
-
+        SwingUtilities.invokeLater(() -> {
+            numberOfFilesLabel.setText(String.valueOf(numberOfFiles));
+        });
     }
 
     @Override
