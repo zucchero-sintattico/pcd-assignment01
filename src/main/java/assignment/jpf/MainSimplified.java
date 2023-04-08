@@ -1,23 +1,50 @@
 package assignment.jpf;
 
+import assignment.algorithm.AlgorithmConfiguration;
 import assignment.jpf.agents.PathConsumerSimplified;
 import assignment.jpf.agents.PathProducerSimplified;
+import gov.nasa.jpf.vm.Verify;
 import lib.synchronization.ActionBarrier;
 import lib.synchronization.Barrier;
 import lib.synchronization.QueueMonitor;
 import lib.synchronization.StopMonitor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainSimplified {
     public static void main(String[] args) throws InterruptedException {
-        QueueMonitor<Integer> pathQueue = new QueueMonitor<>();
-        QueueMonitor<String> statsQueue = new QueueMonitor<>();
-        Barrier barrier = new ActionBarrier(1, statsQueue::close);
-        StopMonitor stopMonitor = new StopMonitor();
-        PathProducerSimplified producer = new PathProducerSimplified(pathQueue, stopMonitor);
-        PathConsumerSimplified consumer = new PathConsumerSimplified(pathQueue, statsQueue, barrier, stopMonitor);
-        consumer.start();
-        producer.start();
-        producer.join();
-        consumer.join();
+        Verify.beginAtomic();
+        final AlgorithmConfiguration configuration = AlgorithmConfiguration.builder()
+                .withNumberOfPathProducer(1)
+                .withNumberOfPathConsumer(1)
+                .withNumberOfStatisticsConsumer(1)
+                .build();
+        final QueueMonitor<Integer> firstQueue = new QueueMonitor<>();
+        final QueueMonitor<String> secondQueue = new QueueMonitor<>();
+        final Barrier barrier = new ActionBarrier(configuration.numberOfPathConsumer, secondQueue::close);
+        final StopMonitor stopMonitor = new StopMonitor();
+
+        final Set<PathProducerSimplified> producers = new HashSet<>();
+        for (int i = 0; i < configuration.numberOfPathProducer; i++) {
+            producers.add(new PathProducerSimplified(firstQueue));
+        }
+
+        final Set<PathConsumerSimplified> consumers = new HashSet<>();
+        for (int i = 0; i < configuration.numberOfPathConsumer; i++) {
+            consumers.add(new PathConsumerSimplified(firstQueue, secondQueue, barrier));
+        }
+
+        consumers.forEach(Thread::start);
+        producers.forEach(Thread::start);
+        Verify.endAtomic();
+
+        for (PathProducerSimplified producer : producers) {
+            producer.join();
+        }
+
+        for (PathConsumerSimplified consumer : consumers) {
+            consumer.join();
+        }
     }
 }

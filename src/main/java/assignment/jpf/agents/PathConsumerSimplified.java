@@ -3,7 +3,6 @@ package assignment.jpf.agents;
 import lib.architecture.QueueConsumerThread;
 import lib.synchronization.Barrier;
 import lib.synchronization.QueueMonitor;
-import lib.synchronization.StopMonitor;
 
 /**
  * Consumes paths from the queue and produces statistics for each path.
@@ -14,8 +13,8 @@ public class PathConsumerSimplified extends QueueConsumerThread<Integer> {
     private final QueueMonitor<String> statsQueue;
     private final Barrier barrier;
 
-    public PathConsumerSimplified(final QueueMonitor<Integer> pathQueue, final QueueMonitor<String> statsQueue, final Barrier barrier, final StopMonitor stopMonitor) {
-        super(pathQueue, stopMonitor);
+    public PathConsumerSimplified(final QueueMonitor<Integer> pathQueue, final QueueMonitor<String> statsQueue, final Barrier barrier) {
+        super(pathQueue);
         this.statsQueue = statsQueue;
         this.barrier = barrier;
     }
