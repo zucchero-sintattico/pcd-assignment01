@@ -15,7 +15,7 @@ public class PathProducerSimplified extends QueueProducerThread<Integer> {
 
     @Override
     public void run() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             if (this.stopMonitor.hasToBeStopped()) {
                 break;
             } else {

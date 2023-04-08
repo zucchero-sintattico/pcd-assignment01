@@ -2,6 +2,7 @@ package assignment.jpf;
 
 import assignment.jpf.agents.PathConsumerSimplified;
 import assignment.jpf.agents.PathProducerSimplified;
+import assignment.jpf.agents.StatisticConsumerSimplified;
 import lib.synchronization.ActionBarrier;
 import lib.synchronization.Barrier;
 import lib.synchronization.QueueMonitor;
@@ -15,9 +16,12 @@ public class MainSimplified {
         StopMonitor stopMonitor = new StopMonitor();
         PathProducerSimplified producer = new PathProducerSimplified(pathQueue, stopMonitor);
         PathConsumerSimplified consumer = new PathConsumerSimplified(pathQueue, statsQueue, barrier, stopMonitor);
+        StatisticConsumerSimplified statisticConsumer = new StatisticConsumerSimplified(statsQueue, stopMonitor);
+        statisticConsumer.start();
         consumer.start();
         producer.start();
         producer.join();
         consumer.join();
+        statisticConsumer.join();
     }
 }
