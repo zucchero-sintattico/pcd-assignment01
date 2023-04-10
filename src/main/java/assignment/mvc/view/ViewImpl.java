@@ -10,9 +10,12 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+
+import static java.lang.Integer.parseInt;
 
 public class ViewImpl extends JFrame implements View {
 
@@ -21,6 +24,7 @@ public class ViewImpl extends JFrame implements View {
     private final JList<String> topNList = new JList<>();
     private final JList<String> distributionList = new JList<>();
     private Controller controller;
+    private Path selectedPath;
 
     public ViewImpl() {
         super("My View");
@@ -30,7 +34,18 @@ public class ViewImpl extends JFrame implements View {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         final JPanel preferencesPanel = new JPanel();
-        preferencesPanel.setLayout(new GridLayout(3, 2));
+        preferencesPanel.setLayout(new GridLayout(4, 2));
+
+        final JLabel filePathLabel = new JLabel("File path:");
+        final JButton filePathButton = new JButton("Browse");
+        filePathButton.addActionListener(e -> {
+            final JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            UIManager.put("FileChooser.readOnly", Boolean.TRUE);
+            fileChooser.showOpenDialog(this);
+            selectedPath = fileChooser.getSelectedFile().toPath();
+            filePathLabel.setText("File path: " + selectedPath);
+        });
 
         final JLabel nOfRangesLabel = new JLabel("Number of ranges:");
         final JTextField nOfRangesText = new JTextField("5");
@@ -41,7 +56,8 @@ public class ViewImpl extends JFrame implements View {
         final JLabel topNLabel = new JLabel("Top N files number:");
         final JTextField topNText = new JTextField("10");
 
-
+        preferencesPanel.add(filePathLabel);
+        preferencesPanel.add(filePathButton);
         preferencesPanel.add(nOfRangesLabel);
         preferencesPanel.add(nOfRangesText);
         preferencesPanel.add(maxLinesLabel);
@@ -71,16 +87,25 @@ public class ViewImpl extends JFrame implements View {
         final JButton startButton = new JButton("Start");
         final JButton stopButton = new JButton("Stop");
 
+        final Supplier<Boolean> canStart = () -> this.selectedPath != null &&
+                !maxLinesText.getText().equals("") &&
+                !nOfRangesText.getText().equals("") &&
+                !topNText.getText().equals("");
+
         // aggiungo un listener ai bottoni per cambiare il colore del riquadro status
         startButton.addActionListener(e -> {
-            if (!maxLinesText.getText().equals("") && !nOfRangesText.getText().equals("") && !topNText.getText().equals("")) {
-                // statusLabel.setBackground(Color.GREEN); // verde se start
-                controller.startAlgorithm(Paths.get("src/main/java/"), Integer.parseInt(topNText.getText()), Integer.parseInt(nOfRangesText.getText()), Integer.parseInt(maxLinesText.getText()));
-
+            if (canStart.get()) {
+                numberOfFilesLabel.setText("0");
+                topNList.setListData(new String[0]);
+                distributionList.setListData(new String[0]);
+                controller.startAlgorithm(
+                        this.selectedPath,
+                        parseInt(topNText.getText()),
+                        parseInt(nOfRangesText.getText()),
+                        parseInt(maxLinesText.getText()));
             }
         });
         stopButton.addActionListener(e -> {
-            // statusLabel.setBackground(Color.RED); // rosso se stop
             controller.stopAlgorithm();
         });
 
@@ -139,7 +164,7 @@ public class ViewImpl extends JFrame implements View {
     @Override
     public void updateTopN(List<Statistic> stats) {
         final String[] formatted = stats.stream()
-                .map(x -> x.linesCount + " - " + x.file.toString()).toArray(String[]::new);
+                .map(x -> x.linesCount + " - " + x.file.toString().replace(this.selectedPath.toString(), "")).toArray(String[]::new);
         SwingUtilities.invokeLater(() -> {
             topNList.setListData(formatted);
         });
