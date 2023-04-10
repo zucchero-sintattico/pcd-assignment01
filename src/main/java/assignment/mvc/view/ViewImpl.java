@@ -1,4 +1,4 @@
-package assignment.mvc;
+package assignment.mvc.view;
 
 import assignment.Statistic;
 import assignment.algorithm.AlgorithmStatus;
@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class ViewImpl extends JFrame implements View {
 
-    private final JLabel numberOfFilesLabel;
-    private final JLabel statusLabel;
-    private final JList<Statistic> topNList;
+    private final JLabel numberOfFilesLabel = new JLabel("0");
+    private final JLabel statusLabel = new JLabel("Status: Stopped");
+    private final JList<Statistic> topNList = new JList<>();
     private Controller controller;
 
     public ViewImpl() {
@@ -26,18 +26,19 @@ public class ViewImpl extends JFrame implements View {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        JPanel preferencesPanel = new JPanel();
+        final JPanel preferencesPanel = new JPanel();
         preferencesPanel.setLayout(new GridLayout(3, 2));
 
-        JLabel nOfRangesLabel = new JLabel("Number of ranges:");
-        JTextField nOfRangesText = new JTextField("5");
+        final JLabel nOfRangesLabel = new JLabel("Number of ranges:");
+        final JTextField nOfRangesText = new JTextField("5");
 
-        JLabel maxLinesLabel = new JLabel("Max number of lines:");
-        JTextField maxLinesText = new JTextField("100");
+        final JLabel maxLinesLabel = new JLabel("Max number of lines:");
+        final JTextField maxLinesText = new JTextField("100");
 
-        JLabel topNLabel = new JLabel("Top N files number:");
-        JTextField topNText = new JTextField("10");
+        final JLabel topNLabel = new JLabel("Top N files number:");
+        final JTextField topNText = new JTextField("10");
 
 
         preferencesPanel.add(nOfRangesLabel);
@@ -47,48 +48,40 @@ public class ViewImpl extends JFrame implements View {
         preferencesPanel.add(topNLabel);
         preferencesPanel.add(topNText);
 
-        JPanel statusPanel = new JPanel();
-        statusPanel.setBackground(Color.BLUE);
-        statusPanel.setPreferredSize(new Dimension(400, 100));
-
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-        // creo il results panel
-        JPanel resultsPanel = new JPanel();
+        final JPanel resultsPanel = new JPanel();
         resultsPanel.setLayout(new GridLayout(0, 2)); // x righe e 2 colonne
         resultsPanel.setBorder(new TitledBorder("Results Panel"));
         resultsPanel.setPreferredSize(new Dimension(400, 100));
-        topNList = new JList<>();
         resultsPanel.add(topNList);
 
 
-        // creo lo status panel
-        statusPanel = new JPanel();
+        final JPanel statusPanel = new JPanel();
+        statusPanel.setPreferredSize(new Dimension(400, 100));
         statusPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); // allineo i componenti a destra
         statusPanel.setBorder(new TitledBorder("Status Panel"));
 
-        numberOfFilesLabel = new JLabel("0");
 
         // creo il riquadro status
-        statusLabel = new JLabel("Status: ");
         statusLabel.setOpaque(true); // rendo opaco il label per mostrare il colore di sfondo
-        statusLabel.setBackground(Color.GREEN); // imposto il colore verde iniziale
-        // creo i bottoni start e stop
-        JButton startButton = new JButton("Start");
-        JButton stopButton = new JButton("Stop");
-        // aggiungo un listener ai bottoni per cambiare il colore del riquadro status
+        this.updateAlgorithmStatus(AlgorithmStatus.IDLE);
 
+        // creo i bottoni start e stop
+        final JButton startButton = new JButton("Start");
+        final JButton stopButton = new JButton("Stop");
+
+        // aggiungo un listener ai bottoni per cambiare il colore del riquadro status
         startButton.addActionListener(e -> {
             if (!maxLinesText.getText().equals("") && !nOfRangesText.getText().equals("") && !topNText.getText().equals("")) {
-                statusLabel.setBackground(Color.GREEN); // verde se start
+                // statusLabel.setBackground(Color.GREEN); // verde se start
                 controller.startAlgorithm(Paths.get("src/main/java/"), Integer.parseInt(topNText.getText()), Integer.parseInt(nOfRangesText.getText()), Integer.parseInt(maxLinesText.getText()));
 
             }
         });
         stopButton.addActionListener(e -> {
-            statusLabel.setBackground(Color.RED); // rosso se stop
+            // statusLabel.setBackground(Color.RED); // rosso se stop
             controller.stopAlgorithm();
         });
+
         // aggiungo i componenti al panel C
         statusPanel.add(numberOfFilesLabel);
         statusPanel.add(statusLabel);
@@ -105,11 +98,9 @@ public class ViewImpl extends JFrame implements View {
         add(resultsPanel);
         add(statusPanel);
 
-        setVisible(true);
-
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {
-                System.exit(-1);
+                System.exit(0);
             }
         });
     }
@@ -120,12 +111,27 @@ public class ViewImpl extends JFrame implements View {
     }
 
     @Override
-    public void updateAlgorithmStatus(AlgorithmStatus status) {
-        if (status == AlgorithmStatus.RUNNING) {
-            statusLabel.setBackground(Color.GREEN);
-        } else if (status == AlgorithmStatus.STOPPED) {
-            statusLabel.setBackground(Color.RED);
-        }
+    public void updateAlgorithmStatus(final AlgorithmStatus status) {
+        SwingUtilities.invokeLater(() -> {
+            switch (status) {
+                case IDLE:
+                    statusLabel.setText("Status: Idle");
+                    statusLabel.setBackground(Color.LIGHT_GRAY);
+                    break;
+                case RUNNING:
+                    statusLabel.setText("Status: Running");
+                    statusLabel.setBackground(Color.GREEN);
+                    break;
+                case STOPPED:
+                    statusLabel.setText("Status: Stopped");
+                    statusLabel.setBackground(Color.RED);
+                    break;
+                case FINISHED:
+                    statusLabel.setText("Status: Finished");
+                    statusLabel.setBackground(Color.ORANGE);
+                    break;
+            }
+        });
     }
 
     @Override
@@ -148,6 +154,11 @@ public class ViewImpl extends JFrame implements View {
         SwingUtilities.invokeLater(() -> {
             numberOfFilesLabel.setText(String.valueOf(numberOfFiles));
         });
+    }
+
+    @Override
+    public void start() {
+        this.setVisible(true);
     }
 
 }

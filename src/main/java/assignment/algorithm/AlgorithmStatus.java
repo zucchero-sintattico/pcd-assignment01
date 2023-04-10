@@ -1,6 +1,8 @@
 package assignment.algorithm;
 
 public enum AlgorithmStatus {
+    IDLE,
     RUNNING,
-    STOPPED
+    STOPPED,
+    FINISHED
 }
