@@ -18,7 +18,8 @@ public class ViewImpl extends JFrame implements View {
 
     private final JLabel numberOfFilesLabel = new JLabel("0");
     private final JLabel statusLabel = new JLabel("Status: Stopped");
-    private final JList<Statistic> topNList = new JList<>();
+    private final JList<String> topNList = new JList<>();
+    private final JList<String> distributionList = new JList<>();
     private Controller controller;
 
     public ViewImpl() {
@@ -53,6 +54,7 @@ public class ViewImpl extends JFrame implements View {
         resultsPanel.setBorder(new TitledBorder("Results Panel"));
         resultsPanel.setPreferredSize(new Dimension(400, 100));
         resultsPanel.add(topNList);
+        resultsPanel.add(distributionList);
 
 
         final JPanel statusPanel = new JPanel();
@@ -136,15 +138,21 @@ public class ViewImpl extends JFrame implements View {
 
     @Override
     public void updateTopN(List<Statistic> stats) {
+        final String[] formatted = stats.stream()
+                .map(x -> x.linesCount + " - " + x.file.toString()).toArray(String[]::new);
         SwingUtilities.invokeLater(() -> {
-            topNList.setListData(stats.toArray(new Statistic[0]));
+            topNList.setListData(formatted);
         });
     }
 
     @Override
     public void updateDistribution(Map<Range, Integer> distribution) {
         SwingUtilities.invokeLater(() -> {
-            // TODO
+            distributionList.setListData(
+                    distribution.entrySet().stream()
+                            .map(x -> x.getKey().toString() + " : " + x.getValue())
+                            .toArray(String[]::new)
+            );
         });
 
     }

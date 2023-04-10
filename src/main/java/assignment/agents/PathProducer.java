@@ -33,15 +33,14 @@ public class PathProducer extends QueueProducerThread<Path> {
             pathStream.filter(Files::isRegularFile)
                     .filter(p -> p.toString().endsWith(".java"))
                     .forEach((f) -> {
-                        /*
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
-                        */
                         if (this.stopMonitor.hasToBeStopped()) {
                             this.closeQueue();
+                            throw new RuntimeException();
                         } else {
                             this.produce(f);
                             this.logger.log("Produced " + f);
@@ -49,6 +48,8 @@ public class PathProducer extends QueueProducerThread<Path> {
                     });
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        } catch (RuntimeException e) {
+            // Do nothing
         } finally {
             this.closeQueue();
             LoggerMonitor.getInstance().log("Finished Reading File");

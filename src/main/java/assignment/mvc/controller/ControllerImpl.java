@@ -56,6 +56,9 @@ public class ControllerImpl implements Controller {
             this.view.updateAlgorithmStatus(this.status);
             try {
                 this.algorithm.join();
+                if (this.status == AlgorithmStatus.STOPPED) {
+                    return;
+                }
                 this.status = AlgorithmStatus.FINISHED;
                 this.logger.log("Algorithm finished");
                 this.view.updateAlgorithmStatus(this.status);

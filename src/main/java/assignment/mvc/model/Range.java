@@ -5,12 +5,13 @@ import java.util.Objects;
 public class Range {
     private final int start;
     private final int end;
-    private  int base = 10;
+    private int base = 10;
 
     public Range(int start, int end) {
         this.start = start;
         this.end = end;
     }
+
     public Range(int startPow, int endPow, int base) {
         this.start = (int) Math.pow(base, startPow);
         this.end = (int) Math.pow(base, endPow);
@@ -40,9 +41,6 @@ public class Range {
 
     @Override
     public String toString() {
-        return "Range{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
+        return "Range(" + start + ", " + (end == Integer.MAX_VALUE ? "INF" : end) + ")";
     }
 }
