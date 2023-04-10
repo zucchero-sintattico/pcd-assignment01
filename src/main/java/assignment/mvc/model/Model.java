@@ -20,4 +20,6 @@ public interface Model {
     void registerOnNumberOfFilesChange(NumberOfFilesChangeListener listener);
     void registerOnTopNChange(TopChangeListener listener);
     void registerOnDistributionChange(DistributionChangeListener listener);
+
+    void reset();
 }

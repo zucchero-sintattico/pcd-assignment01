@@ -99,6 +99,15 @@ public class ModelImpl implements Model {
     public void registerOnDistributionChange(DistributionChangeListener listener) {
         this.distributionChangeListeners.add(listener);
     }
+
+    @Override
+    public void reset() {
+        this.allStats.clear();
+        this.topStats.clear();
+        this.distribution.clear();
+
+    }
+
     private void notifyDistributionChangeListeners() {
         for (DistributionChangeListener listener : this.distributionChangeListeners) {
             listener.consume(this.getDistribution());

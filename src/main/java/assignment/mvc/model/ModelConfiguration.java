@@ -5,9 +5,9 @@ public class ModelConfiguration {
     public final int nl;
     public final int maxl;
 
-    public ModelConfiguration(int n, int nl, int maxl) {
+    public ModelConfiguration(int n, int nOfIntervals, int maxl) {
         this.n = n;
-        this.nl = nl;
+        this.nl = nOfIntervals;
         this.maxl = maxl;
     }
 }
