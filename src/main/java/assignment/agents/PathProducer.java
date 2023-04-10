@@ -34,7 +34,7 @@ public class PathProducer extends QueueProducerThread<Path> {
                     .filter(p -> p.toString().endsWith(".java"))
                     .forEach((f) -> {
                         try {
-                            Thread.sleep(100);
+                            Thread.sleep(10);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }

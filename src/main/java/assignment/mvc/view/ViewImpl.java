@@ -19,7 +19,7 @@ import static java.lang.Integer.parseInt;
 
 public class ViewImpl extends JFrame implements View {
 
-    private final JLabel numberOfFilesLabel = new JLabel("0");
+    private final JLabel numberOfFilesLabel = new JLabel("Founded files: 0");
     private final JLabel statusLabel = new JLabel("Status: Stopped");
     private final JList<String> topNList = new JList<>();
     private final JList<String> distributionList = new JList<>();
@@ -95,7 +95,7 @@ public class ViewImpl extends JFrame implements View {
         // aggiungo un listener ai bottoni per cambiare il colore del riquadro status
         startButton.addActionListener(e -> {
             if (canStart.get()) {
-                numberOfFilesLabel.setText("0");
+                numberOfFilesLabel.setText("Founded files: 0");
                 topNList.setListData(new String[0]);
                 distributionList.setListData(new String[0]);
                 controller.startAlgorithm(
@@ -185,7 +185,7 @@ public class ViewImpl extends JFrame implements View {
     @Override
     public void updateNumberOfFiles(int numberOfFiles) {
         SwingUtilities.invokeLater(() -> {
-            numberOfFilesLabel.setText(String.valueOf(numberOfFiles));
+            numberOfFilesLabel.setText("Founded files: " + numberOfFiles);
         });
     }
 
