@@ -26,12 +26,16 @@ public class PathProducer extends QueueProducerThread<Path> {
         this.stopMonitor = stopMonitor;
     }
 
+    private boolean isJavaFile(Path path) {
+        return path.toString().endsWith(".java");
+    }
+
     @Override
     public void run() {
         this.logger.log("Starting File Analyzer");
         try (Stream<Path> pathStream = Files.walk(this.path)) {
             pathStream.filter(Files::isRegularFile)
-                    .filter(p -> p.toString().endsWith(".java"))
+                    .filter(this::isJavaFile)
                     .forEach((f) -> {
                         try {
                             Thread.sleep(10);
@@ -52,7 +56,7 @@ public class PathProducer extends QueueProducerThread<Path> {
             // Do nothing
         } finally {
             this.closeQueue();
-            LoggerMonitor.getInstance().log("Finished Reading File");
+            this.logger.log("Finished Reading File");
         }
     }
 }
