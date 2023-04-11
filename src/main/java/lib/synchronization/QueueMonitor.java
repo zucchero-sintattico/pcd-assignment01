@@ -9,6 +9,7 @@ import java.util.concurrent.locks.Condition;
 
 /**
  * A generic closeable queue that uses a monitor to synchronize access to the queue.
+ *
  * @param <T> the type of the elements in the queue.
  * @see Monitor
  * @see CloseableQueue
@@ -16,11 +17,20 @@ import java.util.concurrent.locks.Condition;
 public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
     private final Queue<T> queue = new ConcurrentLinkedQueue<>();
     private final Condition notEmpty = newCondition();
+    private final Condition notFull = newCondition();
+    private final int maxSize = 100;
     private boolean open = true;
 
     @Override
     public void enqueue(final T value) {
         monitored(() -> {
+            while (queue.size() == maxSize && open) {
+                try {
+                    notFull.await();
+                } catch (final InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             queue.add(value);
             notEmpty.signal();
         });
@@ -36,7 +46,9 @@ public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
                     e.printStackTrace();
                 }
             }
-            return this.isOpen() ? Optional.of(queue.remove()) : Optional.empty();
+            Optional<T> res = this.isOpen() ? Optional.of(queue.remove()) : Optional.empty();
+            notFull.signal();
+            return res;
         });
     }
 

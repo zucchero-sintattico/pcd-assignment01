@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Range {
     private final int start;
     private final int end;
-    private int base = 10;
+    public int base = 10;
 
     public Range(int start, int end) {
         this.start = start;

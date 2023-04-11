@@ -23,17 +23,16 @@ public class AssignmentAlgorithm {
     private final StatisticQueue statisticQueue = new StatisticQueue();
     private final Barrier statisticsBarrier;
     private final StopMonitor stopMonitor;
-
     private final Set<PathProducer> pathProducers;
     private final Set<PathConsumer> pathConsumers;
     private final Set<StatisticConsumer> statisticConsumers;
 
 
-    public AssignmentAlgorithm(final Model model, final Path path, final AlgorithmConfiguration configuration) {
+    public AssignmentAlgorithm(final Model model, final Path path, final AlgorithmConfiguration configuration, final Boolean withSleep) {
         this.statisticsBarrier = new ActionBarrier(configuration.numberOfPathConsumer, statisticQueue::close);
         this.stopMonitor = new StopMonitor();
         this.pathProducers = createAgents(configuration.numberOfPathProducer,
-                () -> new PathProducer(pathQueue, path, stopMonitor)
+                () -> new PathProducer(pathQueue, path, stopMonitor, withSleep)
         );
         this.pathConsumers = createAgents(configuration.numberOfPathConsumer,
                 () -> new PathConsumer(pathQueue, statisticQueue, statisticsBarrier, stopMonitor)
@@ -41,6 +40,11 @@ public class AssignmentAlgorithm {
         this.statisticConsumers = createAgents(configuration.numberOfStatisticsConsumer,
                 () -> new StatisticConsumer(statisticQueue, model, stopMonitor)
         );
+
+    }
+
+    public AssignmentAlgorithm(final Model model, final Path path, final AlgorithmConfiguration configuration) {
+        this(model, path, configuration, false);
     }
 
     private <T> Set<T> createAgents(final int numberOfAgents, final Supplier<T> factory) {
