@@ -24,7 +24,7 @@ public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
     @Override
     public void enqueue(final T value) {
         monitored(() -> {
-            if (queue.size() == maxSize) {
+            while (queue.size() == maxSize && open) {
                 try {
                     notFull.await();
                 } catch (final InterruptedException e) {
@@ -46,10 +46,9 @@ public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
                     e.printStackTrace();
                 }
             }
-            if (queue.size() == maxSize) {
-                notFull.signal();
-            }
-            return this.isOpen() ? Optional.of(queue.remove()) : Optional.empty();
+            Optional<T> res = this.isOpen() ? Optional.of(queue.remove()) : Optional.empty();
+            notFull.signal();
+            return res;
         });
     }
 

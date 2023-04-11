@@ -38,7 +38,6 @@ public class PathConsumer extends QueueConsumerThread<Path> {
             this.statsQueue.enqueue(new Statistic(filepath, lines));
         } catch (IOException e) {
             System.out.println(e);
-            throw new RuntimeException(e);
         }
     }
 
