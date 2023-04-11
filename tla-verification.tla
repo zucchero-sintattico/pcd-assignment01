@@ -7,8 +7,8 @@ CONSTANTS MaxQueueSize
 variable pathqueue = <<>>;
 variable statsqueue = <<>>;
 define
-  BoundedQueue == Len(pathqueue) <= MaxQueueSize 
-  BoundedQueue == Len(statsqueue) <= MaxQueueSize
+  BoundedPathQueue == Len(pathqueue) <= MaxQueueSize 
+  BoundedStatsQueue == Len(statsqueue) <= MaxQueueSize
 end define;
 
 process pathproducer \in { "pathproducer" } 
