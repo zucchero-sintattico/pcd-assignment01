@@ -1,4 +1,4 @@
-package assignment.mvc;
+package assignment.mvc.view;
 
 import assignment.Statistic;
 import assignment.algorithm.AlgorithmStatus;
@@ -19,4 +19,6 @@ public interface View {
     void updateDistribution(Map<Range, Integer> distribution);
 
     void updateNumberOfFiles(int numberOfFiles);
+
+    void start();
 }

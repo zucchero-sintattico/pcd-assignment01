@@ -19,11 +19,17 @@ public class PathProducer extends QueueProducerThread<Path> {
     private final Logger logger = LoggerMonitor.getInstance();
     private final StopMonitor stopMonitor;
     private final Path path;
+    private final Boolean withSleep;
 
     public PathProducer(QueueMonitor<Path> queue, Path path, final StopMonitor stopMonitor) {
+        this(queue, path, stopMonitor, false);
+    }
+
+    public PathProducer(QueueMonitor<Path> queue, Path path, final StopMonitor stopMonitor, final Boolean withSleep) {
         super(queue);
         this.path = path;
         this.stopMonitor = stopMonitor;
+        this.withSleep = withSleep;
     }
 
     @Override
@@ -34,12 +40,15 @@ public class PathProducer extends QueueProducerThread<Path> {
                     .filter(p -> p.toString().endsWith(".java"))
                     .forEach((f) -> {
                         try {
-                            Thread.sleep(10);
+                            if (this.withSleep){
+                                Thread.sleep(10);
+                            }
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
                         if (this.stopMonitor.hasToBeStopped()) {
                             this.closeQueue();
+                            throw new RuntimeException();
                         } else {
                             this.produce(f);
                             this.logger.log("Produced " + f);
@@ -47,6 +56,8 @@ public class PathProducer extends QueueProducerThread<Path> {
                     });
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        } catch (RuntimeException e) {
+            // Do nothing
         } finally {
             this.closeQueue();
             LoggerMonitor.getInstance().log("Finished Reading File");

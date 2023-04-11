@@ -5,12 +5,11 @@ import assignment.algorithm.AlgorithmStatus;
 import assignment.algorithm.AssignmentAlgorithm;
 import assignment.logger.Logger;
 import assignment.logger.LoggerMonitor;
-import assignment.mvc.View;
 import assignment.mvc.model.Model;
 import assignment.mvc.model.ModelConfiguration;
+import assignment.mvc.view.View;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ControllerImpl implements Controller {
 
@@ -21,7 +20,7 @@ public class ControllerImpl implements Controller {
     private final Model model;
     private final AlgorithmConfiguration config;
     private AssignmentAlgorithm algorithm;
-    private AlgorithmStatus status;
+    private AlgorithmStatus status = AlgorithmStatus.IDLE;
     private View view;
 
     public ControllerImpl(Model model) {
@@ -46,17 +45,36 @@ public class ControllerImpl implements Controller {
     @Override
     public void startAlgorithm(Path path, int topN, int nOfIntervals, int maxL) {
         this.model.reset();
-        ModelConfiguration modelConfiguration = new ModelConfiguration(topN, nOfIntervals, maxL);
+        final ModelConfiguration modelConfiguration = new ModelConfiguration(topN, nOfIntervals, maxL);
         this.model.setConfiguration(modelConfiguration);
-        this.algorithm = new AssignmentAlgorithm(this.model, path, this.config);
-        this.algorithm.start();
-        this.status = AlgorithmStatus.RUNNING;
-        this.logger.log("Algorithm started");
-        this.view.updateAlgorithmStatus(this.status);
+
+        final Thread algorithmThread = new Thread(() -> {
+            this.algorithm = new AssignmentAlgorithm(this.model, path, this.config);
+            this.algorithm.start();
+            this.status = AlgorithmStatus.RUNNING;
+            this.logger.log("Algorithm started");
+            this.view.updateAlgorithmStatus(this.status);
+            try {
+                this.algorithm.join();
+                if (this.status == AlgorithmStatus.STOPPED) {
+                    return;
+                }
+                this.status = AlgorithmStatus.FINISHED;
+                this.logger.log("Algorithm finished");
+                this.view.updateAlgorithmStatus(this.status);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        algorithmThread.start();
     }
 
     @Override
     public void stopAlgorithm() {
+        if (this.status != AlgorithmStatus.RUNNING) {
+            return;
+        }
         this.algorithm.stop();
         this.status = AlgorithmStatus.STOPPED;
         this.logger.log("Algorithm stopped");

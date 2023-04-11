@@ -1,8 +1,6 @@
 package assignment.mvc.controller;
 
-import assignment.algorithm.AlgorithmConfiguration;
-import assignment.mvc.View;
-import assignment.mvc.model.ModelConfiguration;
+import assignment.mvc.view.View;
 
 import java.nio.file.Path;
 
