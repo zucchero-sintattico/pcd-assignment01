@@ -49,7 +49,7 @@ public class ControllerImpl implements Controller {
         this.model.setConfiguration(modelConfiguration);
 
         final Thread algorithmThread = new Thread(() -> {
-            this.algorithm = new AssignmentAlgorithm(this.model, path, this.config);
+            this.algorithm = new AssignmentAlgorithm(this.model, path, this.config, true);
             this.algorithm.start();
             this.status = AlgorithmStatus.RUNNING;
             this.logger.log("Algorithm started");
