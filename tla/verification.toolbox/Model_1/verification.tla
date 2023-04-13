@@ -22,7 +22,7 @@ define
   StatsConsumerWillEnd == <>(pc["statsconsumer"] = "Done")
   AllWillEnd == <>(pc["pathproducer"] = "Done" /\ pc["pathconsumer1"] = "Done" /\ pc["pathconsumer2"] = "Done" /\ pc["statsconsumer"] = "Done")
   
-  \* Closed Queue Check
+  \* Closed Queues Checks
   PathQueueWillBeClosed == <>pathqueueclosed
   StatsQueueWillBeClosed == <>statsqueueclosed
   
@@ -303,7 +303,7 @@ Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
 =============================================================================
 \* Modification History
-\* Last modified Thu Apr 13 12:20:03 CEST 2023 by alessandro
+\* Last modified Thu Apr 13 12:22:32 CEST 2023 by alessandro
 \* Last modified Sun Mar 28 15:40:26 CEST 2021 by aricci
 \* Created Sun Mar 28 08:34:06 CEST 2021 by aricci
 

@@ -23,7 +23,7 @@ Semantic processing of module MC
 SANY finished.
 @!@!@ENDMSG 2219 @!@!@
 @!@!@STARTMSG 2185:0 @!@!@
-Starting... (2023-04-13 12:20:07)
+Starting... (2023-04-13 12:22:36)
 @!@!@ENDMSG 2185 @!@!@
 @!@!@STARTMSG 2212:0 @!@!@
 Implied-temporal checking--satisfiability problem has 8 branches.
@@ -35,22 +35,22 @@ Computing initial states...
 Finished computing initial states: 1 distinct state generated.
 @!@!@ENDMSG 2190 @!@!@
 @!@!@STARTMSG 2192:0 @!@!@
-Checking 8 branches of temporal properties for the current state space with 65501 total distinct states at (2023-04-13 12:20:10)
+Checking 8 branches of temporal properties for the current state space with 63967 total distinct states at (2023-04-13 12:22:39)
 @!@!@ENDMSG 2192 @!@!@
 @!@!@STARTMSG 2267:0 @!@!@
-Finished checking temporal properties in 00s at 2023-04-13 12:20:11
+Finished checking temporal properties in 00s at 2023-04-13 12:22:40
 @!@!@ENDMSG 2267 @!@!@
 @!@!@STARTMSG 2200:0 @!@!@
-Progress(24) at 2023-04-13 12:20:11: 23209 states generated (23,209 s/min), 8346 distinct states found (8,346 ds/min), 1101 states left on queue.
+Progress(23) at 2023-04-13 12:22:40: 22601 states generated (22,601 s/min), 8151 distinct states found (8,151 ds/min), 1128 states left on queue.
 @!@!@ENDMSG 2200 @!@!@
 @!@!@STARTMSG 2200:0 @!@!@
-Progress(36) at 2023-04-13 12:20:12: 44593 states generated, 15105 distinct states found, 0 states left on queue.
+Progress(36) at 2023-04-13 12:22:41: 44593 states generated, 15105 distinct states found, 0 states left on queue.
 @!@!@ENDMSG 2200 @!@!@
 @!@!@STARTMSG 2192:0 @!@!@
-Checking 8 branches of temporal properties for the complete state space with 120840 total distinct states at (2023-04-13 12:20:12)
+Checking 8 branches of temporal properties for the complete state space with 120840 total distinct states at (2023-04-13 12:22:41)
 @!@!@ENDMSG 2192 @!@!@
 @!@!@STARTMSG 2267:0 @!@!@
-Finished checking temporal properties in 00s at 2023-04-13 12:20:12
+Finished checking temporal properties in 00s at 2023-04-13 12:22:41
 @!@!@ENDMSG 2267 @!@!@
 @!@!@STARTMSG 2193:0 @!@!@
 Model checking completed. No error has been found.
@@ -60,7 +60,7 @@ Model checking completed. No error has been found.
   based on the actual fingerprints:  val = 5.7E-12
 @!@!@ENDMSG 2193 @!@!@
 @!@!@STARTMSG 2201:0 @!@!@
-The coverage statistics at 2023-04-13 12:20:12
+The coverage statistics at 2023-04-13 12:22:41
 @!@!@ENDMSG 2201 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
   line 147, col 12 to line 147, col 20 of module verification: 41
@@ -510,7 +510,7 @@ The coverage statistics at 2023-04-13 12:20:12
 End of statistics.
 @!@!@ENDMSG 2202 @!@!@
 @!@!@STARTMSG 2200:0 @!@!@
-Progress(36) at 2023-04-13 12:20:12: 44593 states generated (511,192 s/min), 15105 distinct states found (173,156 ds/min), 0 states left on queue.
+Progress(36) at 2023-04-13 12:22:41: 44593 states generated (488,511 s/min), 15105 distinct states found (165,473 ds/min), 0 states left on queue.
 @!@!@ENDMSG 2200 @!@!@
 @!@!@STARTMSG 2199:0 @!@!@
 44593 states generated, 15105 distinct states found, 0 states left on queue.
@@ -519,5 +519,5 @@ Progress(36) at 2023-04-13 12:20:12: 44593 states generated (511,192 s/min), 151
 The depth of the complete state graph search is 36.
 @!@!@ENDMSG 2194 @!@!@
 @!@!@STARTMSG 2186:0 @!@!@
-Finished in 05s at (2023-04-13 12:20:12)
+Finished in 05s at (2023-04-13 12:22:41)
 @!@!@ENDMSG 2186 @!@!@
