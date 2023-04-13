@@ -18,7 +18,7 @@ public class QueueMonitor<T> extends Monitor implements CloseableQueue<T> {
     private final Queue<T> queue = new ConcurrentLinkedQueue<>();
     private final Condition notEmpty = newCondition();
     private final Condition notFull = newCondition();
-    private final int maxSize = 100;
+    private final int maxSize = 1000;
     private boolean open = true;
 
     @Override
