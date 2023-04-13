@@ -27,14 +27,13 @@ end define;
 fair process pathproducer \in { "pathproducer" } 
 variables currentItem = "";
 begin Produce:
-  while TRUE do
+  while pathitems /= <<>> do
     produce:
-        if pathitems /= <<>> then
+        if pathitems = <<>> then
+            goto closepathqueue;
+        else
             currentItem := Head(pathitems);
             pathitems := Tail(pathitems);
-            goto put;
-        else
-            goto closepathqueue;
         end if;
     put: 
         await Len(pathqueue) < MaxQueueSize;
@@ -47,7 +46,7 @@ end process;
 fair process pathconsumer \in { "pathconsumer1", "pathconsumer2" }
 variables pathitem = "none", statitem = "none";
 begin Consume:
-  while TRUE do
+  while ~pathqueueclosed /\ pathqueue /= <<>> do
     take: 
         if ~pathqueueclosed /\ pathqueue /= <<>> then
                 pathitem := Head(pathqueue);
@@ -72,7 +71,7 @@ end process;
 fair process statsconsumer \in { "statsconsumer" }
 variable statitem = "none";
 begin Consume:
-  while TRUE do
+  while ~statsqueueclosed /\ statsqueue /= <<>> do
     take: 
         if ~statsqueueclosed /\ statsqueue /= <<>> then
                 statitem := Head(statsqueue);
@@ -94,9 +93,9 @@ end algorithm;*)
 
 \* BEGIN TRANSLATION (chksum(pcal) = "26c3172" /\ chksum(tla) = "e7cb84b")
 \* Label produce of process pathproducer at line 32 col 9 changed to produce_
-\* Label Consume of process pathconsumer at line 50 col 3 changed to Consume_
-\* Label take of process pathconsumer at line 52 col 9 changed to take_
-\* Process variable statitem of process pathconsumer at line 48 col 30 changed to statitem_
+\* Label Consume of process pathconsumer at line 49 col 3 changed to Consume_
+\* Label take of process pathconsumer at line 51 col 9 changed to take_
+\* Process variable statitem of process pathconsumer at line 47 col 30 changed to statitem_
 VARIABLES pathitems, pathqueue, pathqueueclosed, statsqueue, statsqueueclosed, 
           pc
 
@@ -138,18 +137,20 @@ Init == (* Global variables *)
                                         [] self \in { "statsconsumer" } -> "Consume"]
 
 Produce(self) == /\ pc[self] = "Produce"
-                 /\ pc' = [pc EXCEPT ![self] = "produce_"]
+                 /\ IF pathitems /= <<>>
+                       THEN /\ pc' = [pc EXCEPT ![self] = "produce_"]
+                       ELSE /\ pc' = [pc EXCEPT ![self] = "closepathqueue"]
                  /\ UNCHANGED << pathitems, pathqueue, pathqueueclosed, 
                                  statsqueue, statsqueueclosed, currentItem, 
                                  pathitem, statitem_, statitem >>
 
 produce_(self) == /\ pc[self] = "produce_"
-                  /\ IF pathitems /= <<>>
-                        THEN /\ currentItem' = [currentItem EXCEPT ![self] = Head(pathitems)]
+                  /\ IF pathitems = <<>>
+                        THEN /\ pc' = [pc EXCEPT ![self] = "closepathqueue"]
+                             /\ UNCHANGED << pathitems, currentItem >>
+                        ELSE /\ currentItem' = [currentItem EXCEPT ![self] = Head(pathitems)]
                              /\ pathitems' = Tail(pathitems)
                              /\ pc' = [pc EXCEPT ![self] = "put"]
-                        ELSE /\ pc' = [pc EXCEPT ![self] = "closepathqueue"]
-                             /\ UNCHANGED << pathitems, currentItem >>
                   /\ UNCHANGED << pathqueue, pathqueueclosed, statsqueue, 
                                   statsqueueclosed, pathitem, statitem_, 
                                   statitem >>
@@ -173,7 +174,9 @@ pathproducer(self) == Produce(self) \/ produce_(self) \/ put(self)
                          \/ closepathqueue(self)
 
 Consume_(self) == /\ pc[self] = "Consume_"
-                  /\ pc' = [pc EXCEPT ![self] = "take_"]
+                  /\ IF ~pathqueueclosed /\ pathqueue /= <<>>
+                        THEN /\ pc' = [pc EXCEPT ![self] = "take_"]
+                        ELSE /\ pc' = [pc EXCEPT ![self] = "closestatsqueue"]
                   /\ UNCHANGED << pathitems, pathqueue, pathqueueclosed, 
                                   statsqueue, statsqueueclosed, currentItem, 
                                   pathitem, statitem_, statitem >>
@@ -220,7 +223,9 @@ pathconsumer(self) == Consume_(self) \/ take_(self) \/ produce(self)
                          \/ consume(self) \/ closestatsqueue(self)
 
 Consume(self) == /\ pc[self] = "Consume"
-                 /\ pc' = [pc EXCEPT ![self] = "take"]
+                 /\ IF ~statsqueueclosed /\ statsqueue /= <<>>
+                       THEN /\ pc' = [pc EXCEPT ![self] = "take"]
+                       ELSE /\ pc' = [pc EXCEPT ![self] = "theend"]
                  /\ UNCHANGED << pathitems, pathqueue, pathqueueclosed, 
                                  statsqueue, statsqueueclosed, currentItem, 
                                  pathitem, statitem_, statitem >>
@@ -267,7 +272,7 @@ Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
 =============================================================================
 \* Modification History
-\* Last modified Wed Apr 12 16:19:35 CEST 2023 by alessandro
+\* Last modified Thu Apr 13 11:37:40 CEST 2023 by alessandro
 \* Last modified Sun Mar 28 15:40:26 CEST 2021 by aricci
 \* Created Sun Mar 28 08:34:06 CEST 2021 by aricci
 
