@@ -12,20 +12,27 @@ variables pathitems = <<"el1", "el2", "el3">>,
           statsqueue = <<>>, 
           statsqueueclosed = FALSE;
 define
+  \* Bounded Queue Checks
   BoundedPathQueue == Len(pathqueue) >= 0 /\ Len(pathqueue) <= MaxQueueSize 
   BoundedStatsQueue == Len(statsqueue) >= 0 /\ Len(statsqueue) <= MaxQueueSize
   
+  \* Termination Checks
   PathProducerWillEnd == <>(pc["pathproducer"] = "Done")
   PathConsumersWillEnd == <>(pc["pathconsumer1"] = "Done" /\ pc["pathconsumer2"] = "Done")
   StatsConsumerWillEnd == <>(pc["statsconsumer"] = "Done")
   AllWillEnd == <>(pc["pathproducer"] = "Done" /\ pc["pathconsumer1"] = "Done" /\ pc["pathconsumer2"] = "Done" /\ pc["statsconsumer"] = "Done")
   
+  \* Closed Queue Check
+  PathQueueWillBeClosed == <>pathqueueclosed
+  StatsQueueWillBeClosed == <>statsqueueclosed
+  
+  \* No Push on closed Queues
   NoPushOnPathQueueClosed == [](pathqueueclosed ~> ~<>(pc["pathproducer"] = "put"))
   NoPushOnStatsQueueClosed == [](statsqueueclosed ~> ~<>(pc["pathconsumer1"] = "put" \/ pc["pathconsumer2"] = "put"))
 end define;
 
-macro push(q, i) begin
-    q := Append(q, i);
+macro push(q, e) begin
+    q := Append(q, e);
 end macro;
 
 macro pop(q, e) begin
@@ -41,6 +48,16 @@ macro waitNotEmpty(q) begin
     await q /= <<>>;
 end macro;
 
+macro waitNotFullAndPush(q, e) begin
+    waitNotFull(q);
+    push(q, e);
+end macro;
+
+macro waitNotEmptyAndPop(q, e) begin
+    waitNotEmpty(q);
+    pop(q, e);
+end macro;
+
 fair process pathproducer \in { "pathproducer" } 
 variables currentItem = "";
 begin Produce:
@@ -52,8 +69,7 @@ begin Produce:
             pop(pathitems, currentItem);
         end if;
     put: 
-        waitNotFull(pathqueue);
-        push(pathqueue, currentItem);
+        waitNotFullAndPush(pathqueue, currentItem);
   end while;
   closepathqueue:
     pathqueueclosed := TRUE;
@@ -65,18 +81,16 @@ begin Consume:
   while ~pathqueueclosed /\ pathqueue /= <<>> do
     take: 
         if ~pathqueueclosed /\ pathqueue /= <<>> then
-                pop(pathqueue, pathitem);
+            pop(pathqueue, pathitem);
         elsif ~pathqueueclosed /\ pathqueue = <<>> then
-                waitNotEmpty(pathqueue);
-                pop(pathqueue, pathitem);
+            waitNotEmptyAndPop(pathqueue, pathitem);
         else
             goto closestatsqueue;
         end if;
     produce:
         statitem := "statitem";
     consume:
-        waitNotFull(statsqueue);
-        push(statsqueue, statitem);
+        waitNotFullAndPush(statsqueue, statitem);
   end while;
   closestatsqueue:
     statsqueueclosed := TRUE;
@@ -90,8 +104,7 @@ begin Consume:
         if ~statsqueueclosed /\ statsqueue /= <<>> then
             pop(statsqueue, statitem);
         elsif ~statsqueueclosed /\ statsqueue = <<>> then
-            waitNotEmpty(statsqueue);
-            pop(statsqueue, statitem);
+            waitNotEmptyAndPop(statsqueue, statitem);
         else
             goto theend;
         end if;
@@ -104,10 +117,10 @@ end process;
 end algorithm;*)
 
 \* BEGIN TRANSLATION (chksum(pcal) = "26c3172" /\ chksum(tla) = "e7cb84b")
-\* Label produce of process pathproducer at line 49 col 9 changed to produce_
-\* Label Consume of process pathconsumer at line 65 col 3 changed to Consume_
-\* Label take of process pathconsumer at line 67 col 9 changed to take_
-\* Process variable statitem of process pathconsumer at line 63 col 30 changed to statitem_
+\* Label produce of process pathproducer at line 66 col 9 changed to produce_
+\* Label Consume of process pathconsumer at line 81 col 3 changed to Consume_
+\* Label take of process pathconsumer at line 83 col 9 changed to take_
+\* Process variable statitem of process pathconsumer at line 79 col 30 changed to statitem_
 VARIABLES pathitems, pathqueue, pathqueueclosed, statsqueue, statsqueueclosed, 
           pc
 
@@ -115,10 +128,16 @@ VARIABLES pathitems, pathqueue, pathqueueclosed, statsqueue, statsqueueclosed,
 BoundedPathQueue == Len(pathqueue) >= 0 /\ Len(pathqueue) <= MaxQueueSize
 BoundedStatsQueue == Len(statsqueue) >= 0 /\ Len(statsqueue) <= MaxQueueSize
 
+
 PathProducerWillEnd == <>(pc["pathproducer"] = "Done")
 PathConsumersWillEnd == <>(pc["pathconsumer1"] = "Done" /\ pc["pathconsumer2"] = "Done")
 StatsConsumerWillEnd == <>(pc["statsconsumer"] = "Done")
 AllWillEnd == <>(pc["pathproducer"] = "Done" /\ pc["pathconsumer1"] = "Done" /\ pc["pathconsumer2"] = "Done" /\ pc["statsconsumer"] = "Done")
+
+
+PathQueueWillBeClosed == <>pathqueueclosed
+StatsQueueWillBeClosed == <>statsqueueclosed
+
 
 NoPushOnPathQueueClosed == [](pathqueueclosed ~> ~<>(pc["pathproducer"] = "put"))
 NoPushOnStatsQueueClosed == [](statsqueueclosed ~> ~<>(pc["pathconsumer1"] = "put" \/ pc["pathconsumer2"] = "put"))
@@ -284,7 +303,7 @@ Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
 =============================================================================
 \* Modification History
-\* Last modified Thu Apr 13 11:51:34 CEST 2023 by alessandro
+\* Last modified Thu Apr 13 12:20:03 CEST 2023 by alessandro
 \* Last modified Sun Mar 28 15:40:26 CEST 2021 by aricci
 \* Created Sun Mar 28 08:34:06 CEST 2021 by aricci
 

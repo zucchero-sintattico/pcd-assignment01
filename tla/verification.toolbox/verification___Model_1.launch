@@ -32,6 +32,8 @@
 <listEntry value="1NoPushOnStatsQueueClosed"/>
 <listEntry value="1AllWillEnd"/>
 <listEntry value="1NoPushOnPathQueueClosed"/>
+<listEntry value="1PathQueueWillBeClosed"/>
+<listEntry value="1StatsQueueWillBeClosed"/>
 </listAttribute>
 <stringAttribute key="modelExpressionEval" value=""/>
 <stringAttribute key="modelParameterActionConstraint" value=""/>
