@@ -24,6 +24,23 @@ define
   NoPushOnStatsQueueClosed == [](statsqueueclosed ~> ~<>(pc["pathconsumer1"] = "put" \/ pc["pathconsumer2"] = "put"))
 end define;
 
+macro push(q, i) begin
+    q := Append(q, i);
+end macro;
+
+macro pop(q, e) begin
+    e := Head(q);
+    q := Tail(q);
+end macro;
+
+macro waitNotFull(q) begin
+    await Len(q) < MaxQueueSize;
+end macro;
+
+macro waitNotEmpty(q) begin
+    await q /= <<>>;
+end macro;
+
 fair process pathproducer \in { "pathproducer" } 
 variables currentItem = "";
 begin Produce:
@@ -32,12 +49,11 @@ begin Produce:
         if pathitems = <<>> then
             goto closepathqueue;
         else
-            currentItem := Head(pathitems);
-            pathitems := Tail(pathitems);
+            pop(pathitems, currentItem);
         end if;
     put: 
-        await Len(pathqueue) < MaxQueueSize;
-        pathqueue := Append(pathqueue, currentItem);
+        waitNotFull(pathqueue);
+        push(pathqueue, currentItem);
   end while;
   closepathqueue:
     pathqueueclosed := TRUE;
@@ -49,20 +65,18 @@ begin Consume:
   while ~pathqueueclosed /\ pathqueue /= <<>> do
     take: 
         if ~pathqueueclosed /\ pathqueue /= <<>> then
-                pathitem := Head(pathqueue);
-                pathqueue := Tail(pathqueue);
+                pop(pathqueue, pathitem);
         elsif ~pathqueueclosed /\ pathqueue = <<>> then
-                await pathqueue /= <<>>;
-                pathitem := Head(pathqueue);
-                pathqueue := Tail(pathqueue);
+                waitNotEmpty(pathqueue);
+                pop(pathqueue, pathitem);
         else
             goto closestatsqueue;
         end if;
     produce:
         statitem := "statitem";
     consume:
-        await Len(statsqueue) < MaxQueueSize;
-        statsqueue := Append(statsqueue, statitem);
+        waitNotFull(statsqueue);
+        push(statsqueue, statitem);
   end while;
   closestatsqueue:
     statsqueueclosed := TRUE;
@@ -74,12 +88,10 @@ begin Consume:
   while ~statsqueueclosed /\ statsqueue /= <<>> do
     take: 
         if ~statsqueueclosed /\ statsqueue /= <<>> then
-                statitem := Head(statsqueue);
-                statsqueue := Tail(statsqueue);
+            pop(statsqueue, statitem);
         elsif ~statsqueueclosed /\ statsqueue = <<>> then
-                await statsqueue /= <<>>;
-                statitem := Head(statsqueue);
-                statsqueue := Tail(statsqueue);
+            waitNotEmpty(statsqueue);
+            pop(statsqueue, statitem);
         else
             goto theend;
         end if;
@@ -92,10 +104,10 @@ end process;
 end algorithm;*)
 
 \* BEGIN TRANSLATION (chksum(pcal) = "26c3172" /\ chksum(tla) = "e7cb84b")
-\* Label produce of process pathproducer at line 32 col 9 changed to produce_
-\* Label Consume of process pathconsumer at line 49 col 3 changed to Consume_
-\* Label take of process pathconsumer at line 51 col 9 changed to take_
-\* Process variable statitem of process pathconsumer at line 47 col 30 changed to statitem_
+\* Label produce of process pathproducer at line 49 col 9 changed to produce_
+\* Label Consume of process pathconsumer at line 65 col 3 changed to Consume_
+\* Label take of process pathconsumer at line 67 col 9 changed to take_
+\* Process variable statitem of process pathconsumer at line 63 col 30 changed to statitem_
 VARIABLES pathitems, pathqueue, pathqueueclosed, statsqueue, statsqueueclosed, 
           pc
 
@@ -272,7 +284,7 @@ Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
 =============================================================================
 \* Modification History
-\* Last modified Thu Apr 13 11:37:40 CEST 2023 by alessandro
+\* Last modified Thu Apr 13 11:51:34 CEST 2023 by alessandro
 \* Last modified Sun Mar 28 15:40:26 CEST 2021 by aricci
 \* Created Sun Mar 28 08:34:06 CEST 2021 by aricci
 
