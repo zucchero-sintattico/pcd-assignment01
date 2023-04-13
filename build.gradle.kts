@@ -1,4 +1,3 @@
-
 import org.gradle.configurationcache.extensions.capitalized
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
@@ -25,6 +24,14 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
+// create task for run Main
+tasks.register<JavaExec>("runMain") {
+    group = "Verification"
+    description = "Run the main class"
+    mainClass.set("Main")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
@@ -46,10 +53,10 @@ val verifyAll by tasks.register<DefaultTask>("runVerifyAll") {
  * The container will be mounted with all the files and folders of the project, except the build folder
  */
 val allFileButBuildAndHide = File(rootProject.rootDir.path)
-    .listFiles { a -> !(a.name.startsWith(".") || a.name == "build") }
-    .map { it -> "type=bind,source=${it.absolutePath},target=/home/${it.name}" }
-    .flatMap { it ->  listOf("--mount", it) }
-    .toTypedArray()
+        .listFiles { a -> !(a.name.startsWith(".") || a.name == "build") }
+        .map { it -> "type=bind,source=${it.absolutePath},target=/home/${it.name}" }
+        .flatMap { it -> listOf("--mount", it) }
+        .toTypedArray()
 
 // Path in which the search of other jpf file starts
 val searchingPath = "/src/main/jpf/"
@@ -64,22 +71,23 @@ val noOutput = ByteArrayOutputStream()
  * If you have a jpf in another path, then it is better to use the jpfVerify task
  */
 File(rootProject.rootDir.path + searchingPath).listFiles()
-    ?.filter { it.extension == "jpf" }
-    ?.sortedBy { it.nameWithoutExtension }
-    ?.forEach {
-        fun launchVerificationTask(taskName: String, file: File) = tasks.register<JavaExec>(taskName) {
-            group = verificationGroup
-            description = "Verify the ${file.nameWithoutExtension} using JPF"
-            javaLauncher.set(
-                javaToolchains.launcherFor {
-                    languageVersion.set(JavaLanguageVersion.of(8))
-                }
-            )
-            main = "-jar"
-            args = listOf("./jpf-runner/build/RunJPF.jar", ".${searchingPath}" + file.name)
+        ?.filter { it.extension == "jpf" }
+        ?.sortedBy { it.nameWithoutExtension }
+        ?.forEach {
+            fun launchVerificationTask(taskName: String, file: File) = tasks.register<JavaExec>(taskName) {
+                group = verificationGroup
+                description = "Verify the ${file.nameWithoutExtension} using JPF"
+                javaLauncher.set(
+                        javaToolchains.launcherFor {
+                            languageVersion.set(JavaLanguageVersion.of(8))
+                        }
+                )
+                main = "-jar"
+                args = listOf("./jpf-runner/build/RunJPF.jar", ".${searchingPath}" + file.name)
+            }
+
+            val capitalizedName = it.nameWithoutExtension.capitalize()
+            val jpfVerification by launchVerificationTask("run${capitalizedName}Verify", it)
+            jpfVerification.dependsOn(tasks.getByName("compileJava"))
+            verifyAll.dependsOn(jpfVerification)
         }
-        val capitalizedName = it.nameWithoutExtension.capitalize()
-        val jpfVerification by launchVerificationTask("run${capitalizedName}Verify", it)
-        jpfVerification.dependsOn(tasks.getByName("compileJava"))
-        verifyAll.dependsOn(jpfVerification)
-    }
