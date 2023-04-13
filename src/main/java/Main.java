@@ -26,9 +26,9 @@ class AlgorithmTest {
 
     public void run() {
 
-        for (int i = pathConsumerRange.getStart(); i <= pathConsumerRange.getEnd(); i=i*pathConsumerRange.base) {
+        for (int i = pathConsumerRange.getStart(); i <= pathConsumerRange.getEnd(); i = i * pathConsumerRange.base) {
             final long[] times = new long[iterations];
-            for(int j = 0; j < iterations; j++) {
+            for (int j = 0; j < iterations; j++) {
                 // Capture the output of standard output
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 PrintStream ps = new PrintStream(baos);
@@ -70,7 +70,7 @@ public class Main {
     public static void main(String[] args) {
 
         final Path path = Paths.get("generator");
-        final Range pathConsumerRange = new Range(1, 9, 2);
+        final Range pathConsumerRange = new Range(0, 9, 2);
         final int iterations = 10;
 
         final AlgorithmTest test = new AlgorithmTest(path, pathConsumerRange, iterations);
