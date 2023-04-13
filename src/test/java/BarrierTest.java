@@ -3,13 +3,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class FooTest {
+public class BarrierTest {
     @Test
     public void testActionBarrier() {
         final ActionBarrier barrier = new ActionBarrier(2, () -> {
